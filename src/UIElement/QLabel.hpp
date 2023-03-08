@@ -16,12 +16,11 @@ private:
 
     QString _text;
 
-
 public:
 
     explicit QLabel( QString t );
     explicit QLabel( const std::string& t ) {
-        this->_text = QString(t);
+        _text = QString(t);
     }
 
     QLabel text( QString t );

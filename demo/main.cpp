@@ -2,7 +2,7 @@
 // Created by mac on 2023/3/5.
 //
 
-#include "qvgl.hpp"
+#include "QuickVGL.hpp"
 
 #include "cstdio"
 #include "main.hpp"
@@ -17,7 +17,7 @@ typedef enum {
 
 void initHomePage(){
 
-    QView * qView = new QView();
+    QView * qView = new QView( { 150, 300 }, {50,50} );
 
 //    qView->insert(reinterpret_cast<struct QView &>(qView));
 //
@@ -29,13 +29,19 @@ void initHomePage(){
 }
 
 
+void initLVGL(){
+
+}
+
 
 
 int main(){
 
     printf("Hello QVGL\n");
 
-//    QUIManager::init();
+    QuickVGL::init();
+
+    auto display = new QDisplay( nullptr );
 
 //    initHomePage();
 
@@ -60,5 +66,8 @@ int main(){
 //    label1.text("hello").append("world").show();
 //    label1.text("").hide();
 
-    showQVersion();
+    QuickVGL::showVersion();
+
+    QUILauncher::singleton()->run( 15 );
+
 }

@@ -33,9 +33,10 @@ class QView {
 
     lv_obj_t * lvObj;
 
-    QColor _bgColor;
-    QSize  _size;
-    QPosition _position;
+    QColor _bgColor{};
+    QColor _tintColor{};
+    QSize  _size{};
+    QPosition _position{};
 
     // child elements
     std::vector<QView> nodes;

@@ -16,14 +16,12 @@ QView *UIManager::getByID(QAppIDType id) {
 
     QHashView * hview = nullptr;
 
-    std::for_each(this->hashViews.begin(), this->hashViews.end(),
-                  [&id, &hview]( QHashView v ) { if ( id == v.id ) hview = &v; }
-                  );
+    for(QHashView v: hashViews)
+        if ( id == v.id ) hview = &v;
 
-    if( !hview ){
+    if( !hview )
+        hashView( *(hview = new QHashView( new QView(), id )) );
 
-        this->hashView( *(hview = new QHashView( new QView(), id )) );
-    }
     return hview->view;
 }
 
@@ -31,14 +29,13 @@ QView *UIManager::getByID(QAppIDType id) {
 
 QAppIDType UIManager::hashView( QView * view, QAppIDType id) {
 
-    this->hashViews.emplace_back( view, id );
-
+    hashViews.emplace_back( view, id );
     return id;
 }
 
 QAppIDType UIManager::hashView(QHashView hView) {
 
-    this->hashViews.push_back( hView );
+    hashViews.push_back( hView );
     return hView.id;
 }
 

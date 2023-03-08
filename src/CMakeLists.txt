@@ -1,7 +1,11 @@
 
-include_directories(../src Utils UIElement UIKit UIManager)
+include_directories(../src Graphics Utils UIElement UIKit UIManager)
 
 set(QVGL_LIBFILES
+
+        Graphics/QGraphics.hpp
+        Graphics/FrameBuffer.hpp
+        Graphics/FrameBuffer.cpp
 
         Utils/QTypes.hpp
         Utils/QUtils.hpp
@@ -30,15 +34,29 @@ set(QVGL_LIBFILES
         UIKit/QTab.hpp
         UIKit/QTab.cpp
 
-        UIManager/QUIManager.hpp
-        UIManager/QUIManager.cpp
+        UIManager/QEvent.hpp
+        UIManager/QEvent.cpp
+
+        UIManager/QDisplay.hpp
+        UIManager/QDisplay.cpp
+
+        UIManager/QInput.hpp
+        UIManager/QInput.cpp
+
+        UIManager/QTimer.hpp
+        UIManager/QTimer.cpp
 
         UIManager/QHashView.hpp
         UIManager/QHashView.cpp
 
+        UIManager/QUIManager.hpp
+        UIManager/QUIManager.cpp
 
-        qvgl.hpp
-        qvgl.cpp
+        UIManager/QUILauncher.hpp
+        UIManager/QUILauncher.cpp
+
+        QuickVGL.hpp
+        QuickVGL.cpp
 
         )
 

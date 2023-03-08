@@ -26,9 +26,15 @@ typedef struct {
     int16_t y;
 } QPosition;
 
-typedef struct {
-    QPosition point;
-    QSize size;
-} QRect;
+struct QRect{
+    QPosition p1;
+    QPosition p2;
+
+    bool operator == (const QRect & b) const {
+        return p1.x == b.p1.x && p1.y == b.p1.y && p2.x == b.p2.x && p2.y == b.p2.y;
+    }
+} ;
+
+
 
 #endif //QUICKVGL_QTYPES_HPP

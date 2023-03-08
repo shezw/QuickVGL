@@ -1,7 +1,7 @@
 //
 // Created by mac on 2023/3/5.
 //
-
+#include <cstdlib>
 #include "QView.hpp"
 #include "lvgl.h"
 
@@ -19,11 +19,19 @@ QView *QView::show() {
 
 QView::QView() {
 
+    _bgColor = {255,255,255};
+    _tintColor = {0,0,0};
+    _position = {0,0};
+    _size = {100,100};
     lvObj =  lv_obj_create(nullptr);
 }
 
 QView::QView(QSize size, QPosition pos) {
 
+    _bgColor = {255,255,255};
+    _tintColor = {0,0,0};
+    _position = {0,0};
+    _size = {100,100};
     lvObj =  lv_obj_create(nullptr);
     this->size( size )->pos( pos );
 }
@@ -89,4 +97,13 @@ QColor QView::bg() {
 QColor QView::bg( QViewState forState ) {
 
     return _bgColor;
+}
+
+QColor QView::tintColor() {
+    return _tintColor;
+}
+
+QView *QView::tintColor(QColor color) {
+    _tintColor = color;
+    return this;
 }
