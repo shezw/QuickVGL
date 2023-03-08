@@ -25,7 +25,6 @@ QValue -
     QFloat:QValue
     QFont:QValue
 
-
 QView -
     QImage:QView
     QButton:QView

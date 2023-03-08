@@ -2,7 +2,7 @@
 // Created by mac on 2023/3/5.
 //
 
-#include "qvgl.h"
+#include "qvgl.hpp"
 #include <iostream>
 
 void showQVersion() {

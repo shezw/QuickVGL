@@ -21,7 +21,11 @@ include_directories(
         ${QVGL_DIR}
         ${QVGL_DIR}/UIElement
         ${QVGL_DIR}/UIKit
+        ${QVGL_DIR}/Utils
+        ${QVGL_DIR}/UIManager
         )
+
+add_subdirectory(lvgl)
 
 add_subdirectory(src)
 
