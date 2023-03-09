@@ -10,18 +10,20 @@
 class QTimer {
 private:
 
+    lv_timer_t  * _timer;
+
 public:
     QTimer ();
     virtual ~QTimer ();
     lv_timer_t* raw();
-    QTimer & setCb(lv_timer_cb_t timer_cb);
-    QTimer & del();
-    QTimer & pause();
-    QTimer & resume();
-    QTimer & setPeriod(uint32_t period);
-    QTimer & ready();
-    QTimer & setRepeatCount(int32_t repeat_count);
-    QTimer & reset();
+    QTimer * setCb(lv_timer_cb_t timer_cb);
+    QTimer * del();
+    QTimer * pause();
+    QTimer * resume();
+    QTimer * setPeriod(uint32_t period);
+    QTimer * ready();
+    QTimer * setRepeatCount(int32_t repeat_count);
+    QTimer * reset();
     lv_timer_t *getNext() const noexcept ;
 };
 

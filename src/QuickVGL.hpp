@@ -20,6 +20,7 @@
 #include "QInput.hpp"
 #include "QEvent.hpp"
 #include "QDisplay.hpp"
+#include "QTimer.hpp"
 
 class QuickVGL {
 

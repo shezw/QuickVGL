@@ -7,26 +7,14 @@
 
 #include "lv_drivers/display/fbdev.h"
 
-char * bufferAddr;
-
-void testFlush(lv_disp_drv_t * drv, const lv_area_t * area, lv_color_t * color_p)
-{
-    static unsigned char color = 255;
-    printf("Draw buffer\n");
-    memset( bufferAddr, color++, 800 * 480 * 4 );
-
-    // TODO
-    lv_disp_flush_ready(drv);
-}
-
 QDisplay::QDisplay(lv_disp_drv_t *drv) : QDisplay(drv, 800, 480) {
 }
 
 QDisplay::QDisplay(lv_disp_drv_t *drv, uint16_t hres, uint16_t vres) {
 
-    frameBuffer = new FrameBuffer("/dev/fb0",0);
+    frameBuffer = new FrameBuffer("/dev/fb0", false );
 
-    bufferAddr = frameBuffer->screen_buffer;
+    lvContextBuffer = malloc( frameBuffer->screen_size );
 
     lvDisplayDriver = (lv_disp_drv_t *) malloc( sizeof(lv_disp_drv_t));
     bzero(lvDisplayDriver,sizeof(lv_disp_drv_t));
@@ -36,9 +24,9 @@ QDisplay::QDisplay(lv_disp_drv_t *drv, uint16_t hres, uint16_t vres) {
     lvDispDrawBuf = (lv_disp_draw_buf_t *) malloc( sizeof(lv_disp_draw_buf_t));
     bzero(lvDispDrawBuf,sizeof(lv_disp_draw_buf_t));
 
-    lvDisplayDriver->flush_cb = testFlush;
+    lvDisplayDriver->flush_cb = QDisplay::flush;
 
-    lv_disp_draw_buf_init( lvDispDrawBuf, frameBuffer->fb_draw_buffer, nullptr, frameBuffer->screen_size );
+    lv_disp_draw_buf_init( lvDispDrawBuf, lvContextBuffer, nullptr, frameBuffer->screen_size );
 
     lvDisplay = (_lv_disp_t *) malloc( sizeof(_lv_disp_t));
     bzero(lvDisplay,sizeof(_lv_disp_t));
@@ -47,8 +35,8 @@ QDisplay::QDisplay(lv_disp_drv_t *drv, uint16_t hres, uint16_t vres) {
 //    static lv_color_t buf1_1[MONITOR_HOR_RES * 100];
 //	static lv_color_t buf1_2[MONITOR_HOR_RES * 100];
 //	lv_disp_draw_buf_init(disp_buf1.get(), buf1_1, buf1_2, MONITOR_HOR_RES * 100);
-//
-//        /* Initialize with basic configuration*/
+
+        /* Initialize with basic configuration*/
         if (!drv) {
             /*Create a display*/
             lvDisplayDriver->draw_buf = lvDispDrawBuf;
@@ -56,7 +44,9 @@ QDisplay::QDisplay(lv_disp_drv_t *drv, uint16_t hres, uint16_t vres) {
             lvDisplayDriver->sw_rotate = 1;
             lvDisplayDriver->hor_res = getWidth();
             lvDisplayDriver->ver_res = getHeight();
+            lvDisplayDriver->full_refresh = 1;
             lvDisplayDriver->rotated = LV_DISP_ROT_NONE;
+            lvDisplayDriver->user_data = this;
         } else
             memcpy(lvDisplayDriver, drv, sizeof(lv_disp_drv_t));
 //        disp.reset(lv_disp_drv_register(disp_drv.get()));
@@ -116,8 +106,19 @@ QDisplay * QDisplay::Rotate(uint16_t deg) {
 
 void QDisplay::flush(lv_disp_drv_t * drv, const lv_area_t * area, lv_color_t * color_p)
 {
+    auto * display = static_cast<QDisplay *>(drv->user_data);
+
+    static unsigned char color = 128;
+
+    printf("FLUSH %d %d %d %d\n", area->x1, area->y1, area->x2, area->y2 );
+
+    memset( display->frameBuffer->fb_draw_buffer, color++, display->frameBuffer->screen_size );
+    memcpy( display->frameBuffer->fb_draw_buffer, color_p, (area->x2-area->x1+1)*(area->y2-area->y1)*4 );
+    display->frameBuffer->swap_buffer();
+
     // TODO
     lv_disp_flush_ready(drv);
+
 }
 
 uint16_t QDisplay::getWidth() {

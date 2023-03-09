@@ -9,22 +9,20 @@
 #include "QString.hpp"
 #include <string>
 
-class QLabel : QView {
-
+class QLabel : public QView {
 
 private:
 
-    QString _text;
+    QString * _text;
 
 public:
 
-    explicit QLabel( QString t );
-    explicit QLabel( const std::string& t ) {
-        _text = QString(t);
-    }
+    explicit QLabel( QString * t );
+    explicit QLabel(const std::string &t): QLabel( new QString(t) ){}
+    QLabel * bind( QString * t );
 
-    QLabel text( QString t );
-    QLabel append( QString t );
+    QLabel * text( QString * t );
+    QLabel * append( QString * t );
 };
 
 

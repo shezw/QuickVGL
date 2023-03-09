@@ -31,17 +31,16 @@ enum class QViewState{
 
 class QView {
 
-    lv_obj_t * lvObj;
-
     QColor _bgColor{};
     QColor _tintColor{};
     QSize  _size{};
     QPosition _position{};
 
     // child elements
-    std::vector<QView> nodes;
+    std::vector<QView*> nodes;
 
-
+protected:
+    lv_obj_t * lvObj;
 public:
 
     QView();
@@ -72,7 +71,7 @@ public:
             Layouts
      */
 
-    QView * insert( QView& view );
+    QView * insert( QView * view );
     QView * batchInsert( QView **view );
 
     QView * hide();

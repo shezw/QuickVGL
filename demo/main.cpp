@@ -14,25 +14,15 @@ typedef enum {
 
 } AppID ;
 
+QString * labelText;
 
-void initHomePage(){
+/* Callback for Timer pressed */
+static void TimerCb(lv_timer_t *timer) {
+    static char pressed = 0;
+    pressed++;
 
-    QView * qView = new QView( { 150, 300 }, {50,50} );
-
-//    qView->insert(reinterpret_cast<struct QView &>(qView));
-//
-//    auto * HomePage = new QPage();
-
-//    HomePage.inset( QLabel("25.6c") );
-
-//    HomePage->insert(reinterpret_cast<QView &>(qView));
+    *labelText = std::to_string( pressed );
 }
-
-
-void initLVGL(){
-
-}
-
 
 
 int main(){
@@ -43,7 +33,22 @@ int main(){
 
     auto display = new QDisplay( nullptr );
 
-//    initHomePage();
+    auto * qView = new QView( { 450, 300 }, {150,50} );
+
+    auto * qView1 = new QView( { 150,150 }, {0,0} );
+    auto * qView2 = new QView( { 250,150 }, {10,0} );
+
+    qView->insert( qView1 );
+    qView->insert( qView2 );
+
+    qView2->pos({ 120, 150 });
+
+    labelText = new QString("Hello QLabel");
+    auto * qLabel = new QLabel( labelText );
+
+    qView2->insert( qLabel );
+
+    *labelText = " Test Qstring binding ";
 
 //    initSecondPage();
 
@@ -58,9 +63,14 @@ int main(){
     printf("%s\n", QString::getByID( CurrentTempID )->set( "27.6" )->value().c_str() );
 
 
+    /* Timer */
+    auto *timer = new QTimer();                // or timer = new LvTimer();
+    timer->setPeriod(1000)->
+            setCb(TimerCb)->
+            ready();
+
+
 //    printf("%p\n",UIManager::singleton()->getByID(344));
-
-
 
 //    QLabel label1 = new QLabel( "sprite" );
 //    label1.text("hello").append("world").show();

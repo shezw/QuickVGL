@@ -16,6 +16,8 @@ class QDisplay {
     lv_disp_drv_t * lvDisplayDriver;
     lv_disp_draw_buf_t * lvDispDrawBuf;
 
+    void * lvContextBuffer;
+
     FrameBuffer * frameBuffer;
 
 public:
@@ -29,7 +31,7 @@ public:
     QSize    getSize();
     uint16_t getWidth();
     uint16_t getHeight();
-    void     flush(lv_disp_drv_t * drv, const lv_area_t * area, lv_color_t * color_p);
+    static void     flush(lv_disp_drv_t * drv, const lv_area_t * area, lv_color_t * color_p);
 
     virtual ~QDisplay();
 };

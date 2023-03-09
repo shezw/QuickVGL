@@ -10,6 +10,7 @@ QView *QView::getByID(QAppIDType id) {
 }
 
 QView *QView::hide() {
+
     return this;
 }
 
@@ -19,21 +20,16 @@ QView *QView::show() {
 
 QView::QView() {
 
-    _bgColor = {255,255,255};
-    _tintColor = {0,0,0};
-    _position = {0,0};
-    _size = {100,100};
-    lvObj =  lv_obj_create(nullptr);
 }
 
 QView::QView(QSize size, QPosition pos) {
 
-    _bgColor = {255,255,255};
+    _bgColor = {255,48,255};
     _tintColor = {0,0,0};
-    _position = {0,0};
-    _size = {100,100};
-    lvObj =  lv_obj_create(nullptr);
-    this->size( size )->pos( pos );
+    _position = pos;
+    _size = size;
+    lvObj =  lv_obj_create(lv_scr_act());
+    this->size( size )->pos( pos )->bg(_bgColor);
 }
 
 QView::~QView() {
@@ -43,11 +39,11 @@ QView::~QView() {
     free(lvObj);
 }
 
-QView * QView::insert( QView& view) {
+QView * QView::insert( QView * view) {
 
     nodes.push_back(view);
 
-    lv_obj_set_parent(view.lvObj,lvObj);
+    lv_obj_set_parent(view->lvObj,lvObj);
 
     return this;
 }
@@ -79,7 +75,7 @@ QView *QView::pos(QPosition pos) {
 
 QView *QView::bg(QColor bgColor) {
     _bgColor = bgColor;
-    bg( bgColor, QViewState::DEFAULT );
+    bg( bgColor, QViewState::any );
     return this;
 }
 
