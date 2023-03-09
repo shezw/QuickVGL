@@ -15,13 +15,35 @@ typedef enum {
 } AppID ;
 
 QString * labelText;
+QLabel * qLabel;
+QView  * qView1;
 
 /* Callback for Timer pressed */
 static void TimerCb(lv_timer_t *timer) {
-    static char pressed = 0;
-    pressed++;
 
-    *labelText = std::to_string( pressed );
+    std::string strings[5] = {
+            "Apple",
+            "panda",
+            "snake",
+            "monkey",
+            "tiger"
+    };
+
+    static char pressed = 0;
+    pressed = (pressed+1) % 4;
+
+    *labelText = strings[pressed];
+
+    if ( pressed % 3 == 0 )
+        qLabel->hide();
+    else
+        qLabel->show();
+
+    if ( pressed % 2 == 0 )
+        qView1->hide();
+    else
+        qView1->show();
+
 }
 
 
@@ -35,7 +57,7 @@ int main(){
 
     auto * qView = new QView( { 450, 300 }, {150,50} );
 
-    auto * qView1 = new QView( { 150,150 }, {0,0} );
+    qView1 = new QView( { 150,150 }, {0,0} );
     auto * qView2 = new QView( { 250,150 }, {10,0} );
 
     qView->insert( qView1 );
@@ -44,7 +66,7 @@ int main(){
     qView2->pos({ 120, 150 });
 
     labelText = new QString("Hello QLabel");
-    auto * qLabel = new QLabel( labelText );
+    qLabel = new QLabel( labelText );
 
     qView2->insert( qLabel );
 

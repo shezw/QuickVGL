@@ -7,10 +7,8 @@
 QString::QString() = default;
 
 QString::QString( const std::string& txt ) {
-    set(txt);
-    if ( setterCall ) setterCall( this );
+    setText(txt);
 }
-
 
 QString *QString::getByID( QAppIDType id) {
 
@@ -18,7 +16,12 @@ QString *QString::getByID( QAppIDType id) {
 }
 
 QString &QString::operator=( const std::string& txt) {
+    setText( txt );
+    return *this;
+}
+
+QString *QString::setText( const std::string& txt ) {
     set(txt);
     if ( setterCall ) setterCall( this );
-    return *this;
+    return this;
 }

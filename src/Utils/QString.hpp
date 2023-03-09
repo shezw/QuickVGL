@@ -21,11 +21,13 @@ public:
 
     static QString * getByID( QAppIDType id );
 
+    QString * setText( const std::string & txt );
+
     QString & operator = ( const std::string & txt );
 
     typedef std::function<void(QString * txt)>SetCall;
 
-    SetCall setterCall = nullptr;
+    SetCall setterCall;
 };
 
 

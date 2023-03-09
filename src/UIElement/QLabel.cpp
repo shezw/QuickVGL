@@ -11,10 +11,8 @@ QLabel::QLabel(QString *t) {
 }
 
 QLabel * QLabel::bind( QString * t ){
-    printf("bind!\n");
     t->setterCall = [this]( QString * txt ){
         this->text( txt );
-        printf("bind run ok!\n");
     };
     return this;
 }

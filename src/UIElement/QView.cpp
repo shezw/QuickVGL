@@ -10,11 +10,12 @@ QView *QView::getByID(QAppIDType id) {
 }
 
 QView *QView::hide() {
-
+    lv_obj_add_flag( lvObj, LV_OBJ_FLAG_HIDDEN );
     return this;
 }
 
 QView *QView::show() {
+    lv_obj_clear_flag( lvObj, LV_OBJ_FLAG_HIDDEN );
     return this;
 }
 

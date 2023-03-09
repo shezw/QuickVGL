@@ -9,6 +9,7 @@ QTimer::QTimer() {
 }
 
 QTimer::~QTimer() {
+    lv_timer_del(_timer);
 }
 
 lv_timer_t* QTimer::raw() {
