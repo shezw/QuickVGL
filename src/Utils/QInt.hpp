@@ -16,7 +16,7 @@ public:
     explicit QInt( int int32_t );
 
 
-    static QInt * getByID( QAppIDType id );
+    static QInt * getByID( QHashID id );
 
 };
 

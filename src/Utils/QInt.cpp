@@ -12,7 +12,7 @@ QInt::QInt( int32_t i ) : QValue() {
     this->set( i );
 }
 
-QInt *QInt::getByID( QAppIDType id) {
+QInt *QInt::getByID( QHashID id) {
 
     return new QInt( 0 );
 }

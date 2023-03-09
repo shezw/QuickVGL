@@ -12,7 +12,7 @@ QDisplay::QDisplay(lv_disp_drv_t *drv) : QDisplay(drv, 800, 480) {
 
 QDisplay::QDisplay(lv_disp_drv_t *drv, uint16_t hres, uint16_t vres) {
 
-    frameBuffer = new FrameBuffer("/dev/fb0", false );
+    frameBuffer = new FrameBuffer(DEFAULT_FBDEV, false );
 
     lvContextBuffer = malloc( frameBuffer->screen_size );
 
@@ -31,33 +31,27 @@ QDisplay::QDisplay(lv_disp_drv_t *drv, uint16_t hres, uint16_t vres) {
     lvDisplay = (_lv_disp_t *) malloc( sizeof(_lv_disp_t));
     bzero(lvDisplay,sizeof(_lv_disp_t));
 
+    /* Initialize with basic configuration*/
+    if (!drv) {
+        /*Create a display*/
+        lvDisplayDriver->draw_buf = lvDispDrawBuf;
+        lvDisplayDriver->antialiasing = 1;
+        lvDisplayDriver->sw_rotate = 1;
+        lvDisplayDriver->hor_res = (int16_t) getWidth();
+        lvDisplayDriver->ver_res = (int16_t) getHeight();
+        lvDisplayDriver->full_refresh = 1;
+        lvDisplayDriver->rotated = LV_DISP_ROT_NONE;
+        lvDisplayDriver->user_data = this;
+    } else
+        memcpy(lvDisplayDriver, drv, sizeof(lv_disp_drv_t));
 
-//    static lv_color_t buf1_1[MONITOR_HOR_RES * 100];
-//	static lv_color_t buf1_2[MONITOR_HOR_RES * 100];
-//	lv_disp_draw_buf_init(disp_buf1.get(), buf1_1, buf1_2, MONITOR_HOR_RES * 100);
-
-        /* Initialize with basic configuration*/
-        if (!drv) {
-            /*Create a display*/
-            lvDisplayDriver->draw_buf = lvDispDrawBuf;
-            lvDisplayDriver->antialiasing = 1;
-            lvDisplayDriver->sw_rotate = 1;
-            lvDisplayDriver->hor_res = getWidth();
-            lvDisplayDriver->ver_res = getHeight();
-            lvDisplayDriver->full_refresh = 1;
-            lvDisplayDriver->rotated = LV_DISP_ROT_NONE;
-            lvDisplayDriver->user_data = this;
-        } else
-            memcpy(lvDisplayDriver, drv, sizeof(lv_disp_drv_t));
-//        disp.reset(lv_disp_drv_register(disp_drv.get()));
-//        void(0);
     lvDisplay = lv_disp_drv_register( lvDisplayDriver );
 
 }
 
 
 QDisplay::~QDisplay() {
-//        ~*frameBuffer;
+    delete frameBuffer;
 }
 
 QDisplay * QDisplay::Rotate() {
@@ -108,15 +102,10 @@ void QDisplay::flush(lv_disp_drv_t * drv, const lv_area_t * area, lv_color_t * c
 {
     auto * display = static_cast<QDisplay *>(drv->user_data);
 
-    static unsigned char color = 128;
-
-    printf("FLUSH %d %d %d %d\n", area->x1, area->y1, area->x2, area->y2 );
-
-    memset( display->frameBuffer->fb_draw_buffer, color++, display->frameBuffer->screen_size );
     memcpy( display->frameBuffer->fb_draw_buffer, color_p, (area->x2-area->x1+1)*(area->y2-area->y1)*4 );
     display->frameBuffer->swap_buffer();
 
-    // TODO
+    // TODO Now only support FullRefresh
     lv_disp_flush_ready(drv);
 
 }

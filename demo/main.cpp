@@ -29,7 +29,7 @@ static void TimerCb(lv_timer_t *timer) {
             "tiger"
     };
 
-    static char pressed = 0;
+    static int pressed = 0;
     pressed = (pressed+1) % 4;
 
     *labelText = strings[pressed];
@@ -55,13 +55,13 @@ int main(){
 
     auto display = new QDisplay( nullptr );
 
-    auto * qView = new QView( { 450, 300 }, {150,50} );
+    auto * body = new QView( { 450, 300 }, {150,50} );
 
     qView1 = new QView( { 150,150 }, {0,0} );
     auto * qView2 = new QView( { 250,150 }, {10,0} );
 
-    qView->insert( qView1 );
-    qView->insert( qView2 );
+    body->insert( qView1 );
+    body->insert( qView2 );
 
     qView2->pos({ 120, 150 });
 
@@ -71,6 +71,11 @@ int main(){
     qView2->insert( qLabel );
 
     *labelText = " Test Qstring binding ";
+
+
+    auto qLabel2 = new QLabel( labelText );
+
+    body->insert(qLabel2);
 
 //    initSecondPage();
 
@@ -82,7 +87,7 @@ int main(){
 
 //    QInt::getByID( CurrentTempID );
 
-    printf("%s\n", QString::getByID( CurrentTempID )->set( "27.6" )->value().c_str() );
+    printf("%s\n", QString::query( CurrentTempID )->set( "27.6" )->value().c_str() );
 
 
     /* Timer */

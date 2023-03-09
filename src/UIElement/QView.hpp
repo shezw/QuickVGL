@@ -43,13 +43,15 @@ protected:
     lv_obj_t * lvObj;
 public:
 
+    QHashID id;
+
     QView();
 
     ~QView();
 
     QView( QSize size, QPosition pos );
 
-    static QView * getByID( QAppIDType id );
+    static QView * query( QHashID id );
 
     /**
         Styles

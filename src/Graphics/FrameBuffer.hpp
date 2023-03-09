@@ -21,8 +21,8 @@
 #include <sys/ioctl.h>
 #include <sys/mman.h>
 
-#include <string.h>
-#include <stdio.h>
+#include <cstring>
+#include <cstdio>
 
 #if CHIP(SSD202)
 

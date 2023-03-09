@@ -7,7 +7,7 @@
 
 #include <cstdint>
 
-typedef uint32_t QAppIDType;
+typedef uint32_t QHashID;
 
 typedef struct {
     uint8_t r;

@@ -4,38 +4,22 @@
 #include "QView.hpp"
 #include "QUIManager.hpp"
 
-UIManager::UIManager() {
+QUIManager::QUIManager() {
 
 }
 
-UIManager::~UIManager() {
+QUIManager::~QUIManager() {
 
 }
 
-QView *UIManager::getByID(QAppIDType id) {
+QView *QUIManager::query( QHashID id ) {
 
-    QHashView * hview = nullptr;
-
-    for(QHashView v: hashViews)
-        if ( id == v.id ) hview = &v;
-
-    if( !hview )
-        hashView( *(hview = new QHashView( new QView(), id )) );
-
-    return hview->view;
+    return hashViews[id] ? hashViews[id] : nullptr;
 }
 
 
+QHashID QUIManager::hashView( QView * view, QHashID id) {
 
-QAppIDType UIManager::hashView( QView * view, QAppIDType id) {
-
-    hashViews.emplace_back( view, id );
+    hashViews[ id ] = view;
     return id;
 }
-
-QAppIDType UIManager::hashView(QHashView hView) {
-
-    hashViews.push_back( hView );
-    return hView.id;
-}
-

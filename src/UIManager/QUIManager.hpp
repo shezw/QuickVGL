@@ -6,35 +6,32 @@
 #define QUICKVGL_QUIMANAGER_H
 
 #include <list>
+#include <unordered_map>
 #include "QTypes.hpp"
-#include "QHashView.hpp"
 
 /**
- * UIManager is a manager for the application lifecycle management
+ * QUIManager is a manager for the application lifecycle management
  */
-class UIManager {
+class QUIManager {
 
 private:
 
-    UIManager();
+    QUIManager();
 
-    std::vector<QView*> uiViews;
-    std::list<QHashView> hashViews;
+    std::unordered_map<QHashID ,QView*> hashViews;
 
 public:
 
-    static UIManager * singleton(){
-        static auto * _instance = new UIManager();
+    static QUIManager * singleton(){
+        static auto * _instance = new QUIManager();
         return _instance;
     }
 
-    QAppIDType hashView( QView * view, QAppIDType id );
+    QHashID hashView( QView * view, QHashID id );
 
-    QAppIDType hashView( QHashView hView );
+    QView * query( QHashID id );
 
-    QView * getByID( QAppIDType id );
-
-    ~UIManager();
+    ~QUIManager();
 };
 
 

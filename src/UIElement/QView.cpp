@@ -3,9 +3,11 @@
 //
 #include <cstdlib>
 #include "QView.hpp"
+#include "QUIManager.hpp"
 #include "lvgl.h"
+#include "QIDManager.hpp"
 
-QView *QView::getByID(QAppIDType id) {
+QView *QView::query(QHashID id) {
     return nullptr;
 }
 
@@ -20,12 +22,14 @@ QView *QView::show() {
 }
 
 QView::QView() {
-
+    id = QIDManager::newID();
+    printf("New QView id(%u)\n",id);
+    QUIManager::singleton()->hashView( this, id );
 }
 
 QView::QView(QSize size, QPosition pos) {
 
-    _bgColor = {255,48,255};
+    _bgColor = {255,255,255};
     _tintColor = {0,0,0};
     _position = pos;
     _size = size;
@@ -40,7 +44,7 @@ QView::~QView() {
     free(lvObj);
 }
 
-QView * QView::insert( QView * view) {
+QView * QView::insert( QView * view ) {
 
     nodes.push_back(view);
 

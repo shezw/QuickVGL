@@ -19,8 +19,8 @@ FrameBuffer::FrameBuffer(const char *device ) {
 
 QSize FrameBuffer::getScreenSize() {
     return {
-        vinfo.xres,
-        vinfo.yres
+            (uint16_t)vinfo.xres,
+            (uint16_t)vinfo.yres
     };
 }
 
@@ -40,12 +40,12 @@ FrameBuffer::FrameBuffer(const char *device, bool useDB) {
         throw std::runtime_error("error reading variable information");
     }
 
-    printf("FrameBuffer Info (%d,%d, %d) PHYAddr:(%x)\n", vinfo.xres, vinfo.yres, vinfo.bits_per_pixel, finfo.smem_start );
+    printf("FrameBuffer Info (%d,%d, %d) PHYAddr:(%lx)\n", vinfo.xres, vinfo.yres, vinfo.bits_per_pixel, finfo.smem_start );
 
     screen_size = vinfo.xres * vinfo.yres * vinfo.bits_per_pixel / 8;
 
     // init screen buffer virtual address
-    screen_buffer = (char *)mmap(0, screen_size * (enableDoubleBuf?2:1), PROT_READ | PROT_WRITE, MAP_SHARED, fbfd, 0);
+    screen_buffer = (char *)mmap(nullptr, screen_size * (enableDoubleBuf?2:1), PROT_READ | PROT_WRITE, MAP_SHARED, fbfd, 0);
 
     if (*(int *)screen_buffer == -1) {
         throw std::runtime_error("failed to map framebuffer device to memory");
@@ -205,7 +205,7 @@ void FrameBuffer::clear_screen(QColor color) {
 
 #else
 
-    draw_rectangle({0, 0, vinfo.xres, vinfo.yres}, color);
+    draw_rectangle({0, 0, (int16_t)vinfo.xres, (int16_t)vinfo.yres}, color);
 
 #endif
 

@@ -11,9 +11,9 @@ QLabel::QLabel(QString *t) {
 }
 
 QLabel * QLabel::bind( QString * t ){
-    t->setterCall = [this]( QString * txt ){
+    t->combineLambda( [this]( QString * txt ){
         this->text( txt );
-    };
+    }, this->id );
     return this;
 }
 

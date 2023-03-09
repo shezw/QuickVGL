@@ -46,8 +46,8 @@ set(QVGL_LIBFILES
         UIManager/QTimer.hpp
         UIManager/QTimer.cpp
 
-        UIManager/QHashView.hpp
-        UIManager/QHashView.cpp
+        UIManager/QIDManager.hpp
+        UIManager/QIDManager.cpp
 
         UIManager/QUIManager.hpp
         UIManager/QUIManager.cpp

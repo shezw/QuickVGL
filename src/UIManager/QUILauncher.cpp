@@ -16,7 +16,7 @@ void QUILauncher::handler(uint32_t ms) {
     lv_timer_handler();
 }
 
-void QUILauncher::run( uint32_t loopInMS ) {
+void QUILauncher::run( uint32_t loopInMS ) const {
 
     while ( !_exit ) {
         QUILauncher::handler( loopInMS );

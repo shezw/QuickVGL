@@ -10,6 +10,8 @@
 #include "lvgl.h"
 #include "lv_drivers/display/fbdev.h"
 
+#define DEFAULT_FBDEV "/dev/fb0"
+
 class QDisplay {
 
     lv_disp_t * lvDisplay;

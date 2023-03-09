@@ -23,7 +23,7 @@ public:
         return _uiLauncher;
     }
 
-    void run( uint32_t loopInMS );
+    void run( uint32_t loopInMS ) const;
     void kill();
 
     static void handler(uint32_t ms);
