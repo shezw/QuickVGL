@@ -18,30 +18,6 @@ QString * labelText;
 QLabel * qLabel;
 QView  * qView1;
 
-static void QUart_init(void)
-{
-    char header = 0xff;
-    hv_uart_config_t config = {
-        .uartPath = (char*)"/dev/ttyS0",
-        .baudRate = 9600,
-        .nBits = 8,
-        .nEvent = 'N',
-        .nStop = 1,
-        
-        .headerLen = 1, 
-        .header = &header,
-        .datalenIndex = 4,
-        .lengthCompensate = 6,//13-datalen(7)
-        .footerLen = 0,
-        .footer = NULL,
-    };
-    hv_uart_fd fd3 = hv_uart_init(&config);
-    // hv_uart_reg_verify(fd3,frameVerifyFunc);
-    // hv_uart_reg_recviver(fd3,frameUartRecviver);
-    char sendbuf[2] = {0x0f,0x0a};
-    hv_uart_send(fd3,sendbuf,sizeof(sendbuf));
-}
-
 /* Callback for Timer pressed */
 static void TimerCb(lv_timer_t *timer) {
 
@@ -76,8 +52,6 @@ int main(){
     printf("Hello QVGL\n");
 
     QuickVGL::init();
-    QUart_init();
-
 
     auto display = new QDisplay( nullptr );
 

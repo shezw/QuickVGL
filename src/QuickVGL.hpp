@@ -22,8 +22,6 @@
 #include "QDisplay.hpp"
 #include "QTimer.hpp"
 
-#include "QUart.h"
-
 class QuickVGL {
 
     const static uint32_t DefaultLoopIntervalMS = 20;

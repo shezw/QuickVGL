@@ -1,5 +1,5 @@
 
-include_directories(../src Graphics Utils UIElement UIKit UIManager Uart)
+include_directories(../src Graphics Utils UIElement UIKit UIManager)
 
 set(QVGL_LIBFILES
 
@@ -55,18 +55,12 @@ set(QVGL_LIBFILES
         UIManager/QUILauncher.hpp
         UIManager/QUILauncher.cpp
 
-
-        Uart/QRingbuffer.h
-        Uart/QRingbuffer.c        
-        Uart/QUart.h      
-        Uart/QUart.c           
-
         QuickVGL.hpp
         QuickVGL.cpp
 
         )
 
-link_libraries( lvgl pthread)
+link_libraries( lvgl )
 
 set(SHARED_QVGL STATIC)
 
