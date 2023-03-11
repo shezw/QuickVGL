@@ -26,6 +26,7 @@ include_directories(
         ${QVGL_DIR}/UIElement
         ${QVGL_DIR}/UIKit
         ${QVGL_DIR}/UIManager
+        ${QVGL_DIR}/Uart
         )
 
 add_subdirectory(lv_drivers)
