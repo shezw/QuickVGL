@@ -19,7 +19,7 @@ QImage::QImage( lv_img_dsc_t *lvImgDsc) {
 }
 
 const lv_img_dsc_t *QImage::data() {
-    return _img;
+    return static_cast<const lv_img_dsc_t *>(_useFile ? ((lv_img_t *) lvObj)->src : _img);
 }
 
 QImage *QImage::copy() {
@@ -35,3 +35,21 @@ QImage *QImage::none() {
     auto * noneImg = new QImage(NoneType::QViewNoneImage);
     return noneImg;
 }
+
+#if LV_USE_SJPG || LV_USE_PNG
+
+QImage::QImage(const std::string& path) {
+    _img = nullptr;
+    _useFile = true;
+
+    lvObj = lv_img_create(lv_scr_act());
+    lv_img_set_src( lvObj, path.c_str() );
+
+    lv_obj_set_width(lvObj,LV_SIZE_CONTENT);
+    lv_obj_set_height(lvObj,LV_SIZE_CONTENT);
+
+    pos(0,0);
+    hide();
+}
+
+#endif

@@ -29,6 +29,8 @@ public:
     QImage * add( QImage * qImg, const std::string& id );
     QImage * add( lv_img_dsc_t * lvImgDsc, const std::string& id ) { return add( new QImage( lvImgDsc ), id ); }
 
+    QImage * add( const std::string& path, const std::string& id );
+
     static QImage * query( const std::string& id );
     static QImage * queryIf( const std::string& id );
 };
