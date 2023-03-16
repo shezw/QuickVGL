@@ -7,6 +7,8 @@
 
 #include "lv_drivers/display/fbdev.h"
 
+QDisplay * QDisplay::_defaultDisplay = nullptr;
+
 QDisplay::QDisplay(lv_disp_drv_t *drv) : QDisplay(drv, 800, 480) {
 }
 
@@ -28,11 +30,12 @@ QDisplay::QDisplay(lv_disp_drv_t *drv, uint16_t hres, uint16_t vres) {
 
     lv_disp_draw_buf_init( lvDispDrawBuf, lvContextBuffer, nullptr, frameBuffer->screen_size );
 
-    lvDisplay = (_lv_disp_t *) malloc( sizeof(_lv_disp_t));
+    if (!lvDisplay) lvDisplay = (_lv_disp_t *) malloc( sizeof(_lv_disp_t));
     bzero(lvDisplay,sizeof(_lv_disp_t));
 
     /* Initialize with basic configuration*/
     if (!drv) {
+
         /*Create a display*/
         lvDisplayDriver->draw_buf = lvDispDrawBuf;
         lvDisplayDriver->antialiasing = 1;
@@ -47,10 +50,12 @@ QDisplay::QDisplay(lv_disp_drv_t *drv, uint16_t hres, uint16_t vres) {
 
     lvDisplay = lv_disp_drv_register( lvDisplayDriver );
 
+    if ( !_defaultDisplay ) _defaultDisplay = this;
 }
 
 
 QDisplay::~QDisplay() {
+    free(lvDisplay);
     delete frameBuffer;
 }
 
@@ -93,9 +98,7 @@ QDisplay * QDisplay::Rotate(uint16_t deg) {
         for (int i = 0; i < rotstep; i++)
             Rotate();
     }
-
     return this;
-
 }
 
 void QDisplay::flush(lv_disp_drv_t * drv, const lv_area_t * area, lv_color_t * color_p)
@@ -120,4 +123,19 @@ uint16_t QDisplay::getHeight() {
 
 QSize QDisplay::getSize() {
     return frameBuffer->getScreenSize();
+}
+
+QDisplay *QDisplay::Default( lv_disp_drv_t *drv ) {
+    if ( !QDisplay::_defaultDisplay ){
+        QDisplay::_defaultDisplay = new QDisplay( drv );
+    }
+    return QDisplay::_defaultDisplay;
+}
+
+void QDisplay::init() {
+    QDisplay::Default(nullptr);
+}
+
+void QDisplay::deInit() {
+    delete _defaultDisplay;
 }

@@ -15,4 +15,9 @@ void QuickVGL::init( const uint32_t loopInMS ) {
 
 void QuickVGL::init() {
     QuickVGL::init( QuickVGL::DefaultLoopIntervalMS );
+    QDisplay::init();
+}
+
+void QuickVGL::exit() {
+    QDisplay::deInit();
 }

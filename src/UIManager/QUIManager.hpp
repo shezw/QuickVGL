@@ -7,7 +7,14 @@
 
 #include <list>
 #include <unordered_map>
+
 #include "QTypes.hpp"
+#include "QImageManager.hpp"
+#include "QUILauncher.hpp"
+#include "QInput.hpp"
+#include "QEvent.hpp"
+#include "QDisplay.hpp"
+#include "QTimer.hpp"
 
 /**
  * QUIManager is a manager for the application lifecycle management

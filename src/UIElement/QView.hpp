@@ -11,23 +11,31 @@
 #include "lvgl.h"
 
 enum class QViewState{
-    DEFAULT     =  0x0000,
-    CHECKED     =  0x0001,
-    FOCUSED     =  0x0002,
-    FOCUS_KEY   =  0x0004,
-    EDITED      =  0x0008,
-    HOVERED     =  0x0010,
-    PRESSED     =  0x0020,
-    SCROLLED    =  0x0040,
-    DISABLED    =  0x0080,
+    DEFAULT     =  LV_PART_MAIN | LV_STATE_DEFAULT,
+    CHECKED     =  0x000001,
+    FOCUSED     =  0x000002,
+    FOCUS_KEY   =  0x000004,
+    EDITED      =  0x000008,
+    HOVERED     =  0x000010,
+    PRESSED     =  0x000020,
+    SCROLLED    =  0x000040,
+    DISABLED    =  0x000080,
 
     USER_1      =  0x1000,
     USER_2      =  0x2000,
     USER_3      =  0x4000,
     USER_4      =  0x8000,
 
-    any = 0xFFFF,    /**< Special value can be used in some functions to target all states*/
+    any = 0xFFFFFF,    /**< Special value can be used in some functions to target all states*/
 } ;
+
+typedef enum class NoneType{
+    QViewNoneView,
+    QViewNoneImage,
+    QViewNoneLabel
+} QViewNone;
+
+class QImage;
 
 class QView {
 
@@ -35,23 +43,30 @@ class QView {
     QColor _tintColor{};
     QSize  _size{};
     QPosition _position{};
+    QImage * _bgImage{};
 
     // child elements
     std::vector<QView*> nodes;
 
 protected:
-    lv_obj_t * lvObj;
+    lv_obj_t * lvObj{};
+    bool _none = false;
 public:
+    static QView *none();
+    bool isNone() const { return _none; }
 
-    QHashID id;
+    QHashID id{};
 
     QView();
+    explicit QView(QViewNone);
 
     ~QView();
 
     QView( QSize size, QPosition pos );
 
     static QView * query( QHashID id );
+    static QView * create( uint16_t w, uint16_t h, int16_t x, int16_t y );
+    static QView * create( uint16_t w, uint16_t h );
 
     /**
         Styles
@@ -64,10 +79,22 @@ public:
     QColor    tintColor();
 
     QView * size( QSize size );
+    QView * size( uint16_t w, uint16_t h) { return size({w,h}); }
     QView * pos( QPosition pos );
+    QView * pos( int16_t x, int16_t y) { return pos({x,y}); }
     QView * bg( QColor bgColor, QViewState forState );
+    QView * bg( QColor bgColor, QColor checkColor );
+    QView * bg( uint32_t hexRGBA );
+    QView * bg( uint32_t hexRGBA, QViewState forState);
+    QView * bg( uint32_t bgColor, uint32_t checkColor );
     QView * bg( QColor bgColor );
+    QView * checkBg(uint32_t hexColor);
+    QView * checkBg(QColor bgColor);
     QView * tintColor( QColor color );
+
+    QImage * bgImg();
+    QView * bg( QImage * img );
+    QView * checkBg( QImage * img );
 
     /**
             Layouts
@@ -79,6 +106,30 @@ public:
     QView * hide();
     QView * show();
 
+    QView * noScroll();
+
+    QView * radius(uint16_t r);
+
+    QView * checkable();
+    QView * unCheckable();
+
+    QView * noBorder();
+    QView * border( uint16_t weight );
+
+    QView * padding( uint16_t top, uint16_t right, uint16_t bottom, uint16_t left );
+    QView * paddingTop( uint16_t v );
+    QView * paddingRight( uint16_t v );
+    QView * paddingBottom( uint16_t v );
+    QView * paddingLeft( uint16_t v );
+    QView * noPadding();
+
+
+    /**
+     * UI Management
+     */
+    QView * hash( QHashID vid );
+
+    QView *clean();
 };
 
 

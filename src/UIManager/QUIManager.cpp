@@ -4,22 +4,16 @@
 #include "QView.hpp"
 #include "QUIManager.hpp"
 
-QUIManager::QUIManager() {
+QUIManager::QUIManager() = default;
 
+QUIManager::~QUIManager() = default;
+
+QView *QUIManager::query( QHashID vid ) {
+    assert(hashViews.count(vid) != 0);
+    return hashViews[vid];
 }
 
-QUIManager::~QUIManager() {
-
-}
-
-QView *QUIManager::query( QHashID id ) {
-
-    return hashViews[id] ? hashViews[id] : nullptr;
-}
-
-
-QHashID QUIManager::hashView( QView * view, QHashID id) {
-
-    hashViews[ id ] = view;
-    return id;
+QHashID QUIManager::hashView( QView * view, QHashID vid) {
+    hashViews[ vid ] = view;
+    return vid;
 }

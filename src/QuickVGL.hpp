@@ -16,11 +16,6 @@
 #include "QUIKit.hpp"
 
 #include "QUIManager.hpp"
-#include "QUILauncher.hpp"
-#include "QInput.hpp"
-#include "QEvent.hpp"
-#include "QDisplay.hpp"
-#include "QTimer.hpp"
 
 class QuickVGL {
 
@@ -30,7 +25,17 @@ public:
     static void init();
     static void init( uint32_t loopInMS );
     static void showVersion();
+    static void exit();
 
 };
+
+/**
+ * Sugar
+ */
+
+#define QV(w,h,x,y) QView::create(w,h,x,y)
+#define qview(id) QView::query(id)
+#define ImageSet( img, id ) QImageManager::singleton()->add(img,id);
+#define qimage(id) QImageManager::query(id)
 
 #endif //QUICKVGL_QUICKVGL_HPP

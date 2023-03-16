@@ -14,7 +14,14 @@ class QIDManager {
     QHashID _id = 100000;
     QHashID _vid = 100000;
 
+    /**
+     * id   for Values
+     */
     std::list<QHashID> idSet;
+
+    /**
+     * id   for Views
+     */
     std::list<QHashID> vidSet;
 
     QIDManager();

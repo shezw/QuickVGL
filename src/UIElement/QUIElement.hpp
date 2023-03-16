@@ -7,5 +7,6 @@
 
 #include "QLabel.hpp"
 #include "QView.hpp"
+#include "QImage.hpp"
 
 #endif //QUICKVGL_QUIELEMENT_HPP

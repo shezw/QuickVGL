@@ -79,7 +79,7 @@ void FrameBuffer::updateAlpha( unsigned char alpha ){
     }
 }
 
-void FrameBuffer::draw_pixel(QPosition point, QColor color) {
+void FrameBuffer::draw_pixel(QPosition point, QColor color) const {
 
     uint32_t location = point.x * (vinfo.bits_per_pixel / 8) + point.y  * finfo.line_length;
 
@@ -90,7 +90,7 @@ void FrameBuffer::draw_pixel(QPosition point, QColor color) {
 
 }
 
-void FrameBuffer::draw_rectangle(QRect rect, QColor color) {
+void FrameBuffer::draw_rectangle(QRect rect, QColor color) const {
 
     for (int16_t y = rect.p1.y; y < rect.p2.y; ++y) {
         for (int16_t x = rect.p1.x; x < rect.p2.x; ++x) {
@@ -107,7 +107,7 @@ void FrameBuffer::draw_rectangle(QRect rect, QColor color) {
 //    }
 //}
 
-void FrameBuffer::draw_line_low(QRect l, QColor color) {
+void FrameBuffer::draw_line_low(QRect l, QColor color) const {
     auto dx = (int)l.p2.x - (int)l.p1.x;
     auto dy = (int)l.p2.y - (int)l.p1.y;
     auto yi = 0;
@@ -129,7 +129,7 @@ void FrameBuffer::draw_line_low(QRect l, QColor color) {
     }
 }
 
-void FrameBuffer::draw_line_high(QRect l, QColor color) {
+void FrameBuffer::draw_line_high(QRect l, QColor color) const {
     auto dx = (int)l.p2.x - (int)l.p1.x;
     auto dy = (int)l.p2.y - (int)l.p1.y;
     auto xi = 0;

@@ -25,6 +25,8 @@ set(QVGL_LIBFILES
         UIElement/QView.cpp
         UIElement/QLabel.hpp
         UIElement/QLabel.cpp
+        UIElement/QImage.hpp
+        UIElement/QImage.cpp
 
         UIKit/QUIKit.hpp
         UIKit/QPage.hpp
@@ -48,6 +50,9 @@ set(QVGL_LIBFILES
 
         UIManager/QIDManager.hpp
         UIManager/QIDManager.cpp
+
+        UIManager/QImageManager.hpp
+        UIManager/QImageManager.cpp
 
         UIManager/QUIManager.hpp
         UIManager/QUIManager.cpp

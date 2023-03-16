@@ -20,11 +20,12 @@ void QUILauncher::run( uint32_t loopInMS ) const {
 
     while ( !_exit ) {
         QUILauncher::handler( loopInMS );
-        this_thread::sleep_for(chrono::milliseconds( loopInMS ));
+        this_thread::sleep_for(
+            chrono::milliseconds( loopInMS )
+        );
     }
 }
 
 void QUILauncher::kill() {
-
     _exit = true;
 }

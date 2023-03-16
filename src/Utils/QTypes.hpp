@@ -6,6 +6,8 @@
 #define QUICKVGL_QTYPES_HPP
 
 #include <cstdint>
+#include <cstdio>
+#include <cassert>
 
 typedef uint32_t QHashID;
 

@@ -5,8 +5,7 @@
 #ifndef QUICKVGL_QUILAUNCHER_HPP
 #define QUICKVGL_QUILAUNCHER_HPP
 
-#include <stdint.h>
-
+#include <cstdint>
 
 class QUILauncher {
 

@@ -35,26 +35,26 @@ class FrameBuffer {
     struct fb_var_screeninfo vinfo;
     struct fb_fix_screeninfo finfo;
 
-    int fbfd;
+    int fbfd{};
 
     uint8_t buffer_index = 0;
     bool enableDoubleBuf = false;
     uint8_t currentScreen = 0;
 
-    void draw_line_low(QRect l, QColor color);
-    void draw_line_high(QRect l, QColor color);
+    void draw_line_low(QRect l, QColor color) const;
+    void draw_line_high(QRect l, QColor color) const;
 public:
 
-    char * fb_draw_buffer;
-    char * screen_buffer;
-    long int screen_size;
+    char * fb_draw_buffer{};
+    char * screen_buffer{};
+    long int screen_size{};
 
-    FrameBuffer(const char *device);
+    explicit FrameBuffer(const char *device);
     FrameBuffer(const char *device, bool useDB );
     ~FrameBuffer();
 
-    void draw_pixel(QPosition point, QColor color);
-    void draw_rectangle(QRect rect, QColor color);
+    void draw_pixel(QPosition point, QColor color) const;
+    void draw_rectangle(QRect rect, QColor color) const;
 //    void draw_image(QPosition point, const Image & image);
 
     void draw_line(QRect l, QColor color);
