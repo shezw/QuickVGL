@@ -16,6 +16,7 @@ class QImageManager {
 private:
 
     std::unordered_map<std::string ,QImage*> pool;
+    std::unordered_map<QHashID , QImage*> idPool;
 
     QImageManager() = default;
 
@@ -29,10 +30,16 @@ public:
     QImage * add( QImage * qImg, const std::string& id );
     QImage * add( lv_img_dsc_t * lvImgDsc, const std::string& id ) { return add( new QImage( lvImgDsc ), id ); }
 
+    QImage * add( QImage * qImg, QHashID id );
+    QImage * add( lv_img_dsc_t * lvImgDsc, QHashID id ) { return add( new QImage( lvImgDsc ), id ); }
+
     QImage * add( const std::string& path, const std::string& id );
+    QImage * add( const std::string& path, QHashID id );
 
     static QImage * query( const std::string& id );
+    static QImage * query(QHashID id);
     static QImage * queryIf( const std::string& id );
+
 };
 
 
