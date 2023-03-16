@@ -35,7 +35,7 @@ public:
 
 #define QV(w,h,x,y) QView::create(w,h,x,y)
 #define qview(id) QView::query(id)
-#define ImageSet(img,id) QImageManager::singleton()->add(img,id);
+#define ImageSet(id,img) QImageManager::singleton()->add(img,id);
 #define qimage(id) QImageManager::query(id)
 
 #endif //QUICKVGL_QUICKVGL_HPP

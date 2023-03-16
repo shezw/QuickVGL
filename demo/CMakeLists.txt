@@ -1,4 +1,6 @@
 
 link_libraries( QuickVGL )
 
-add_executable( qdemo main.cpp main.hpp)
+include_directories(../lvgl ../lvgl/src assets)
+
+add_executable( qdemo main.cpp main.hpp assets/testimg.c )
