@@ -5,25 +5,35 @@
 #ifndef QUICKVGL_QFONT_HPP
 #define QUICKVGL_QFONT_HPP
 
-#include "QValue.hpp"
+#include "QInt.hpp"
+#include "QString.hpp"
 #include <cstdint>
 #include <string>
+
+#include "lvgl.h"
 
 class QFont{
 
 private:
 
-    QInt fontSize;
+    QInt _fontSize;
     QString fontName;
-    QString path;
+    QString _fontPath;
 
+    lv_font_t * lvFont = nullptr;
+    lv_style_t * fontStyle = nullptr;
 public:
 
     QFont();
     explicit QFont( QString path );
+    explicit QFont(const std::string& path): QFont( QString(path) ){};
     QFont( QString path, QInt fontSize );
 
+    QFont * initFreetype();
 
+    const lv_style_t * getStyle();
+
+    ~QFont();
 };
 
 

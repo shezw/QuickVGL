@@ -17,8 +17,6 @@ include_directories(${QVGL_DIR} lvgl lvgl/src lv_drivers)
 
 set(QVGL_DIR src)
 
-
-
 include_directories(
         ${QVGL_DIR}
         ${QVGL_DIR}/Graphics
@@ -26,7 +24,15 @@ include_directories(
         ${QVGL_DIR}/UIElement
         ${QVGL_DIR}/UIKit
         ${QVGL_DIR}/UIManager
-        )
+)
+
+# Compile and USE freetype
+#add_subdirectory(freetype)
+
+# Use compiled freetype
+include_directories(/hvtk/local/directfb/x86/amd64/include /hvtk/local/directfb/x86/amd64/include/freetype2)
+link_directories(/hvtk/local/directfb/x86/amd64/lib)
+link_libraries(freetype)
 
 add_subdirectory(lv_drivers)
 

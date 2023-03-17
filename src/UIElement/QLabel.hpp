@@ -7,6 +7,7 @@
 
 #include "QView.hpp"
 #include "QString.hpp"
+#include "QFont.hpp"
 #include <string>
 
 class QLabel : public QView {
@@ -23,6 +24,10 @@ public:
 
     QLabel * text( QString * t );
     QLabel * append( QString * t );
+
+    QLabel * font( QFont * ft );
+
+    static QLabel * query( QHashID id );
 };
 
 

@@ -3,31 +3,30 @@
 //
 
 #include "QImage.hpp"
+#include "QImageManager.hpp"
+#include "QIDManager.hpp"
 
 QImage::QImage( lv_img_dsc_t *lvImgDsc) {
 
-    _img = lvImgDsc;
-
-    lvObj = lv_img_create(lv_scr_act());
-    lv_img_set_src(lvObj,_img);
-
-    lv_obj_set_width(lvObj,LV_SIZE_CONTENT);
-    lv_obj_set_height(lvObj,LV_SIZE_CONTENT);
-
-    pos(0,0);
-    hide();
+    _src = QImageManager::singleton()->addResource(lvImgDsc,QIDManager::singleton()->getID());
+    initView();
 }
 
-const lv_img_dsc_t *QImage::data() {
-    return static_cast<const lv_img_dsc_t *>(_useFile ? ((lv_img_t *) lvObj)->src : _img);
+const QImageResource *QImage::source() {
+    return _src;
 }
 
 QImage *QImage::copy() {
-    return new QImage( _img );
+    return new QImage( _src );
+}
+
+QImage::QImage(QImageResource *src) {
+    _src = src;
+    initView();
 }
 
 QImage::QImage(QViewNone){
-    _img = nullptr;
+    _src = nullptr;
     _none = true;
 }
 
@@ -36,20 +35,54 @@ QImage *QImage::none() {
     return noneImg;
 }
 
-#if LV_USE_SJPG || LV_USE_PNG
+QImage *QImage::create(const std::string &path) {
+    return new QImage( path );
+}
 
-QImage::QImage(const std::string& path) {
-    _img = nullptr;
-    _useFile = true;
+void QImage::initView() {
 
     lvObj = lv_img_create(lv_scr_act());
-    lv_img_set_src( lvObj, path.c_str() );
+
+    if ( _src->isFileSource() ) {
+        lv_img_set_src(lvObj, _src->getSource());
+    }else{
+        lv_img_set_src(lvObj, _src->data());
+    }
 
     lv_obj_set_width(lvObj,LV_SIZE_CONTENT);
     lv_obj_set_height(lvObj,LV_SIZE_CONTENT);
 
-    pos(0,0);
     hide();
+
 }
+
+#if LV_USE_SJPG || LV_USE_PNG
+
+QImage::QImage(const std::string& path) {
+    _src = QImageManager::singleton()->addResource(path,QIDManager::singleton()->getID());
+    initView();
+}
+
+QImage::QImage(lv_img_dsc_t *lvImgDsc, const std::string &id) {
+
+}
+
+QImage::QImage(QImageResource *src, const std::string &id) {
+    _src = src;
+    initView();
+}
+
+QImage::QImage(const std::string &path, const std::string &id) {
+
+}
+
+QImage *QImage::create(const std::string &path, const std::string &id) {
+    return nullptr;
+}
+//
+//QImage *QImage::size(QSize size) {
+//    _src->size(size);
+//    return this;
+//}
 
 #endif

@@ -5,11 +5,14 @@
 #ifndef QUICKVGL_QTYPES_HPP
 #define QUICKVGL_QTYPES_HPP
 
+#include <string>
 #include <cstdint>
 #include <cstdio>
 #include <cassert>
 
 typedef uint32_t QHashID;
+
+extern std::string QHashIDString( QHashID id );
 
 typedef struct {
     uint8_t r;

@@ -10,6 +10,8 @@
 
 #include "QTypes.hpp"
 #include "QImageManager.hpp"
+#include "QImageResource.hpp"
+#include "QFontManager.hpp"
 #include "QUILauncher.hpp"
 #include "QInput.hpp"
 #include "QEvent.hpp"

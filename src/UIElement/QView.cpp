@@ -3,7 +3,7 @@
 //
 #include <cstdlib>
 #include "QView.hpp"
-#include "QImage.hpp"
+#include "QImageResource.hpp"
 #include "QUIManager.hpp"
 #include "lvgl.h"
 #include "QIDManager.hpp"
@@ -209,24 +209,43 @@ QView *QView::checkBg(QColor bgColor) {
     return bg( bgColor, QViewState::CHECKED )->checkable();
 }
 
-QView *QView::bg(QImage *img) {
+QView *QView::bg(QImageResource *img) {
 
-    _bgImage = img;
-    lv_obj_set_style_bg_img_src(lvObj, img->data(), static_cast<lv_style_selector_t>(QViewState::DEFAULT));
+    return bg(img,QViewState::DEFAULT);
+}
+
+QView *QView::checkBg(QImageResource *img) {
+
+    return bg( img, QViewState::DEFAULT );
+}
+
+QView *QView::bg(QImageResource *img, QViewState forState) {
+
+    if (forState==QViewState::DEFAULT)
+        _checkBgImage = img;
+    else
+        _bgImage = img;
+
+    if (img->isFileSource()){
+        lv_obj_set_style_bg_img_src(lvObj, img->getSource(), static_cast<lv_style_selector_t>(forState));
+    }else{
+        lv_obj_set_style_bg_img_src(lvObj, img->data(), static_cast<lv_style_selector_t>(forState));
+    }
 
     return this;
 }
 
-QView *QView::checkBg(QImage *img) {
-
-    _bgImage = img;
-    lv_obj_set_style_bg_img_src(lvObj, img->data(), static_cast<lv_style_selector_t>(QViewState::CHECKED));
-
-    return this;
+QView *QView::bg(QImageResource *img, QImageResource *checkImg) {
+    return bg(img)->checkBg(img);
 }
 
-QImage *QView::bgImg() {
+
+QImageResource *QView::bgImg() {
     return _bgImage;
+}
+
+QImageResource *QView::checkBgImg() {
+    return _checkBgImage;
 }
 
 QView *QView::hash(QHashID vid) {
@@ -249,4 +268,3 @@ QView *QView::bg(uint32_t bgColor, uint32_t checkColor) {
 QView *QView::clean() {
     return noScroll()->noPadding()->noBorder()->radius(0);
 }
-

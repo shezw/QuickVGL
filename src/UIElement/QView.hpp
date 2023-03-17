@@ -7,6 +7,7 @@
 
 #include <vector>
 #include "QTypes.hpp"
+#include "QImageResource.hpp"
 
 #include "lvgl.h"
 
@@ -36,6 +37,7 @@ typedef enum class NoneType{
 } QViewNone;
 
 class QImage;
+class QImageResource;
 
 class QView {
 
@@ -43,7 +45,8 @@ class QView {
     QColor _tintColor{};
     QSize  _size{};
     QPosition _position{};
-    QImage * _bgImage{};
+    QImageResource * _bgImage{};
+    QImageResource * _checkBgImage{};
 
     // child elements
     std::vector<QView*> nodes;
@@ -88,13 +91,16 @@ public:
     QView * bg( uint32_t hexRGBA, QViewState forState);
     QView * bg( uint32_t bgColor, uint32_t checkColor );
     QView * bg( QColor bgColor );
+    QView * bg( QImageResource * img );
+    QView * bg( QImageResource * img, QViewState forState);
+    QView * bg(  QImageResource * img, QImageResource * checkImg );
     QView * checkBg(uint32_t hexColor);
     QView * checkBg(QColor bgColor);
-    QView * tintColor( QColor color );
+    QView * checkBg( QImageResource * img );
+    QImageResource *checkBgImg();
 
-    QImage * bgImg();
-    QView * bg( QImage * img );
-    QView * checkBg( QImage * img );
+    QView * tintColor( QColor color );
+    QImageResource * bgImg();
 
     /**
             Layouts

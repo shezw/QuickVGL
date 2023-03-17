@@ -32,10 +32,20 @@ public:
 /**
  * Sugar
  */
+/*  Resource Set  */
+#define ImageSet(id,img)    QImageManager::singleton()->addResource(img,id);
+#define FontSet(id,font)    QFontManager::singleton()->add(font,id);
 
-#define QV(w,h,x,y) QView::create(w,h,x,y)
-#define qview(id) QView::query(id)
-#define ImageSet(id,img) QImageManager::singleton()->add(img,id);
-#define qimage(id) QImageManager::query(id)
+/* QElements */
+#define QV(w,h,x,y)         QView::create(w,h,x,y)
+#define QI(path)            QImage::create(path)
+#define QL(text)            (new QLabel(text))
+
+/* QElement Query */
+#define qview(id)           QView::query(id)
+#define qlabel(id)          QLabel::query(id)
+#define qimage(id)          QImageManager::query(id)
+#define qimgres(id)         QImageManager::querySource(id)
+#define qfont(id)           QFontManager::query(id)
 
 #endif //QUICKVGL_QUICKVGL_HPP

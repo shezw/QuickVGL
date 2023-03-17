@@ -51,6 +51,12 @@ set(QVGL_LIBFILES
         UIManager/QIDManager.hpp
         UIManager/QIDManager.cpp
 
+        UIManager/QFontManager.hpp
+        UIManager/QFontManager.cpp
+
+        UIManager/QImageResource.hpp
+        UIManager/QImageResource.cpp
+
         UIManager/QImageManager.hpp
         UIManager/QImageManager.cpp
 
@@ -63,7 +69,7 @@ set(QVGL_LIBFILES
         QuickVGL.hpp
         QuickVGL.cpp
 
-        )
+)
 
 link_libraries( lvgl )
 

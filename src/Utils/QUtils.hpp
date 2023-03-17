@@ -10,5 +10,6 @@
 #include "QString.hpp"
 #include "QInt.hpp"
 #include "QFont.hpp"
+#include "QImage.hpp"
 
 #endif //QUICKVGL_QUTILS_HPP

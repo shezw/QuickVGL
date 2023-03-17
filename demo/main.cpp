@@ -17,6 +17,8 @@ typedef enum {
     BrightnessSettingPageID,
     BrightnessLeftPanelID,
 
+    LightOnTitleText,
+
     IconOK_ID
 } AppID ;
 
@@ -106,32 +108,36 @@ static void test_61569UI_TimerCb(lv_timer_t *timer) {
     left+=2;
     top-=1;
 
-    if ( pressed > 25 )
-        qview( BrightnessSettingPageID)->bg( qimage("btn-power-press") );
-    else
-        qview( BrightnessSettingPageID )->bg( qimage("alien") );
+    if ( pressed > 25 ) {
+        qview(BrightnessSettingPageID)->bg(qimgres("PowerOnIcon"));
+        qlabel(LightOnTitleText)->text( new QString("同时点亮 同时熄灭"));
+    }
+    else {
+        qview(BrightnessSettingPageID)->bg(qimgres("alien"));
+        qlabel(LightOnTitleText)->text( new QString("同时点亮 | 同时熄灭"));
+    }
 
     qview(BrightnessLeftPanelID)->pos(left, top);
     qimage("alien")->pos(top,left);
+    // FIXME
+    // 通过qimage获取到的image在特定情况下会出现无法拿到data的问题。暂不清楚原因
 }
 
 
 void test_61569UI_addToScreen(){
 
-    qview( BrightnessSettingPageID )->insert(
+    qview( BrightnessSettingPageID )
+        ->insert(
             qview(BrightnessLeftPanelID)
             ->insert( qimage("ConfirmDelColor")->pos(50,150)->show() )
-            ->insert( QImage::query( IconOK_ID )->pos(20,10)->show() )
-            ->bg( qimage("IconOkay") )
+            ->bg(qimgres("IconOkay") )
     );
 
     qview(BrightnessSettingPageID)
-    ->insert(
-            qimage("alien")->size(320,240)->pos(300,50)->show()
-            )
-    ->insert(
-            qimage("btn-power-normal")->show()
-            );
+        ->insert(
+            qimage("alien")->size({320, 240})->pos(300,50)->show())
+        ->insert(
+            qimage("PowerOffIcon")->show());
 }
 
 void test_61569UI(){
@@ -140,9 +146,14 @@ void test_61569UI(){
 
     ImageSet( "ConfirmDelColor",    &testimgdst );
     ImageSet( "IconOkay",           &testimgdst2 );
-    ImageSet( "alien",              "S:/home/shezw/QuickVGL/demo/assets/alien.sjpg" );
-    ImageSet( "btn-power-normal",   "S:/home/shezw/QuickVGL/demo/assets/btn-power-normal.png" );
-    ImageSet( "btn-power-press",    "S:/home/shezw/QuickVGL/demo/assets/btn-power-press.png" );
+    ImageSet( "alien",              "S:/home/shezw/QuickVGL/demo/assets/61569_lvgl/assets/alien.sjpg" );
+    ImageSet( "PowerOnIcon",        "S:/home/shezw/QuickVGL/demo/assets/61569_lvgl/assets/btn-power-press.png" );
+    ImageSet( "PowerOffIcon",       "S:/home/shezw/QuickVGL/demo/assets/61569_lvgl/assets/btn-power-normal.png" );
+    ImageSet( "brightness-always-on-on", "S:/home/shezw/QuickVGL/demo/assets/61569_lvgl/assets/brightness-always-on-on.png");
+    ImageSet( "brightness-always-on-off", "S:/home/shezw/QuickVGL/demo/assets/61569_lvgl/assets/brightness-always-on-off.png");
+
+    FontSet( "CNFont", "/home/shezw/QuickVGL/demo/assets/fonts/fzhtjw.ttf" );
+    FontSet( "ENFont", "/home/shezw/QuickVGL/demo/assets/fonts/arial.ttf" );
 
     QV(800,480,0,0)
     ->hash(BrightnessSettingPageID)
@@ -152,12 +163,20 @@ void test_61569UI(){
     ->hash(BrightnessLeftPanelID)
     ->clean()->bg(0x212328FF,0xADB0BDFF)->radius(14);
 
-    qimage("IconOkay")->copy()->hash( IconOK_ID );
+    qview(BrightnessSettingPageID)
+        ->insert(
+            qview(BrightnessLeftPanelID)
+                ->insert( QV(40,40,20,20)->clean()->bg(0x0C0D0EFF)->radius(20)->bg(qimgres("PowerOffIcon"), qimgres("PowerOnIcon")))
+                ->insert( QL("常亮模式")->font(qfont("CNFont"))->pos(60,20) )
+                ->insert( QL("同时点亮 同时熄灭")->font(qfont("CNFont"))->pos(60,60)->hash(LightOnTitleText) )
+                ->insert( QI("brightness-always-on-off")->pos(155,90)->show() )
+            )
+        ;
 
     test_61569UI_addToScreen();
 
     /* Timer */
-    auto *timer = new QTimer();                // or timer = new LvTimer();
+    auto *timer = new QTimer();
     timer->setPeriod(15)->setCb(test_61569UI_TimerCb)->ready();
 
 }

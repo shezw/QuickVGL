@@ -4,6 +4,12 @@
 
 #include "QIDManager.hpp"
 
+std::string QHashIDString( QHashID id ) {
+    char s[32];
+    sprintf(s,"%p",&id);
+    return s;
+}
+
 QHashID QIDManager::customID( QHashID cid ){
 
     if ( auto lt = std::find(idSet.begin(), idSet.end(), cid) != idSet.end() )
