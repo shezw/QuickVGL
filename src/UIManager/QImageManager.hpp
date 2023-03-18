@@ -21,7 +21,7 @@ private:
     std::unordered_map<std::string ,QImageResource*> sourcePool;
     std::unordered_map<QHashID , QImageResource*> idSourcePool;
 
-    std::unordered_map<std::string ,QImageResource*> sourceCache;
+    std::unordered_map<std::string ,QImageResource*> fileCache;
 
     QImageManager() = default;
 
@@ -34,17 +34,20 @@ public:
 
     QImage * add( QImage * qImg, const std::string& id );
     QImage * add( QImageResource * qImgSrc, const std::string& id );
-    QImage * add( lv_img_dsc_t * lvImgDsc, const std::string& id ) { return add( new QImage( lvImgDsc ), id ); }
+    QImage * add( lv_img_dsc_t * lvImgDsc, const std::string& id ) { return add( new QImage( new QImageResource(lvImgDsc) ), id ); }
 
     QImage * add( QImage * qImg, QHashID id );
     QImage * add( QImageResource * qImgSrc, QHashID id );
-    QImage * add( lv_img_dsc_t * lvImgDsc, QHashID id ) { return add( new QImage( lvImgDsc ), id ); }
+    QImage * add( lv_img_dsc_t * lvImgDsc, QHashID id ) { return add( new QImage( new QImageResource(lvImgDsc) ), id ); }
 
     QImage * add( const std::string& path, const std::string& id );
     QImage * add( const std::string& path, QHashID id );
 
     bool hasSource(const std::string &path);
     QImageResource * getSource( const std::string& path );
+
+    bool hasSourceByPath(const std::string &path);
+    QImageResource * getSourceByPath(const std::string &path);
 
     QImageResource * addResource( QImageResource * qImgSrc, const std::string& id );
     QImageResource * addResource( lv_img_dsc_t * lvImgDsc, const std::string& id ) { return addResource( new QImageResource( lvImgDsc ), id ); }

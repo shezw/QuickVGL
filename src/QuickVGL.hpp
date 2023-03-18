@@ -33,12 +33,14 @@ public:
  * Sugar
  */
 /*  Resource Set  */
+//  Add Image Resource in to ImageManager
 #define ImageSet(id,img)    QImageManager::singleton()->addResource(img,id);
+//  Add Font to FontManager
 #define FontSet(id,font)    QFontManager::singleton()->add(font,id);
 
 /* QElements */
 #define QV(w,h,x,y)         QView::create(w,h,x,y)
-#define QI(path)            QImage::create(path)
+#define QI(path)            (new QImage(new QImageResource(path)))
 #define QL(text)            (new QLabel(text))
 
 /* QElement Query */

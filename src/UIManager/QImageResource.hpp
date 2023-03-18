@@ -5,6 +5,10 @@
 #ifndef QUICKVGL_QIMAGERESOURCE_HPP
 #define QUICKVGL_QIMAGERESOURCE_HPP
 
+/**
+ * Used for store image resource that for QImageView
+ */
+
 #include <string>
 #include "QView.hpp"
 #include "lvgl.h"
@@ -13,7 +17,6 @@ class QImageResource{
 
     bool _useFile = false;
 
-    lv_obj_t     * _lvObj;
     lv_img_dsc_t * _lvImg;
     std::string _path;
 
@@ -35,7 +38,6 @@ public:
 
     std::string getPath() const;
 
-//    QImageResource * size( QSize size);
 };
 
 

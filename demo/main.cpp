@@ -116,9 +116,14 @@ static void test_61569UI_TimerCb(lv_timer_t *timer) {
         qview(BrightnessSettingPageID)->bg(qimgres("alien"));
         qlabel(LightOnTitleText)->text( new QString("同时点亮 | 同时熄灭"));
     }
-
     qview(BrightnessLeftPanelID)->pos(left, top);
-    qimage("alien")->pos(top,left);
+
+    printf("id %d  pressed %d \n",pos++, pressed);
+    static int k = 0;
+
+        qimage("alien")->pos(top, left);
+        printf("K%d  top %d, left %d\n",k++, top, left);
+
     // FIXME
     // 通过qimage获取到的image在特定情况下会出现无法拿到data的问题。暂不清楚原因
 }
@@ -190,6 +195,6 @@ int main(){
 
     QuickVGL::showVersion();
 
-    QUILauncher::singleton()->run( 15 );
+    QUILauncher::singleton()->run( 50 );
 
 }
