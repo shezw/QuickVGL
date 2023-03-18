@@ -25,15 +25,21 @@ QImage *QImage::none() {
     return noneImg;
 }
 
-void QImage::initView() {
-
-    lvObj = lv_img_create(lv_scr_act());
+void QImage::initSrc() {
 
     if ( _src->isFileSource() ) {
         lv_img_set_src(lvObj, _src->getSource());
     }else{
         lv_img_set_src(lvObj, _src->data());
     }
+
+}
+
+void QImage::initView() {
+
+    lvObj = lv_img_create(lv_scr_act());
+
+    initSrc();
 
     lv_obj_set_width(lvObj,LV_SIZE_CONTENT);
     lv_obj_set_height(lvObj,LV_SIZE_CONTENT);
@@ -44,4 +50,13 @@ void QImage::initView() {
 
 QImage *QImage::copy() {
     return new QImage( _src );
+}
+
+QImage *QImage::setSource(QImageResource *source) {
+
+    _src = source;
+
+    initSrc();
+
+    return this;
 }

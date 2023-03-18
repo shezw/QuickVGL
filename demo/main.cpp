@@ -118,11 +118,16 @@ static void test_61569UI_TimerCb(lv_timer_t *timer) {
     }
     qview(BrightnessLeftPanelID)->pos(left, top);
 
-    printf("id %d  pressed %d \n",pos++, pressed);
+//    printf("id %d  pressed %d \n",pos++, pressed);
     static int k = 0;
 
-        qimage("alien")->pos(top, left);
-        printf("K%d  top %d, left %d\n",k++, top, left);
+    if ( pressed < 25 ){
+        qimage("alien")->setSource(qimgres("alien") )->pos(top, left);
+    }else{
+        qimage("alien")->setSource(qimgres("IconOkay") )->pos(top, left);
+    }
+
+//        printf("K%d  top %d, left %d\n",k++, top, left);
 
     // FIXME
     // 通过qimage获取到的image在特定情况下会出现无法拿到data的问题。暂不清楚原因

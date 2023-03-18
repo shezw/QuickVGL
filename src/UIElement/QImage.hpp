@@ -17,6 +17,7 @@ class QImage : public QView{
     QImageResource * _src;
 
     void initView();
+    void initSrc();
 
 public:
 
@@ -28,6 +29,16 @@ public:
     static QImage * none();
 
     QImage * copy();
+
+
+    QImage * setSource( QImageResource * source );
+
+    typedef std::function<void(QString * txt)>SetSourceCall;
+
+    QImage * combineLambda( SetSourceCall call, QHashID id );
+    std::unordered_map<QHashID ,SetSourceCall> setterPathCalls;
+
+
 
 };
 

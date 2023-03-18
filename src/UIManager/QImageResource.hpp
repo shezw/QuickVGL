@@ -10,15 +10,21 @@
  */
 
 #include <string>
+#include "QString.hpp"
 #include "QView.hpp"
 #include "lvgl.h"
 
 class QImageResource{
 
     bool _useFile = false;
+    QHashID id = 0;
 
-    lv_img_dsc_t * _lvImg;
+    lv_img_dsc_t * _lvImg{};
     std::string _path;
+
+    QImageResource();
+
+    void initId();
 
 public:
 
@@ -27,6 +33,7 @@ public:
 #if LV_USE_SJPG || LV_USE_PNG
 
     explicit QImageResource( const std::string& path );
+    explicit QImageResource(QString *qPath );
 
 #endif
 

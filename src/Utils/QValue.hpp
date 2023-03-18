@@ -17,11 +17,11 @@ private:
 public:
 
     QValue<T> * set( T v ) {
-        this->_v = v;
+        _v = v;
         return this;
     }
 
-    T value() { return this->_v; }
+    T value() const { return _v; }
 
 //    template<class vType>
 //    QValue bind( void * (call), vType v );
