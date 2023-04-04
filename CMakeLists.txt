@@ -3,8 +3,6 @@ project(QuickVGL)
 
 set(CMAKE_CXX_STANDARD 14)
 
-set(CMAKE_BUILD_TYPE Debug)
-
 set(QVGL_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(QVGL_OUTPUTDIR ${QVGL_DIR}/output)
 
@@ -27,18 +25,17 @@ include_directories(
 )
 
 # Compile and USE freetype
-#add_subdirectory(freetype)
+add_subdirectory(freetype)
 
 # Use compiled freetype
-include_directories(/hvtk/local/directfb/x86/amd64/include /hvtk/local/directfb/x86/amd64/include/freetype2)
-link_directories(/hvtk/local/directfb/x86/amd64/lib)
 link_libraries(freetype)
 
 add_subdirectory(lv_drivers)
 
 add_subdirectory(lvgl)
 
+add_subdirectory(lv_c_module)
+
 add_subdirectory(src)
 
 add_subdirectory(demo)
-
