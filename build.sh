@@ -68,14 +68,17 @@ if [[ ${help} == 1 ]]; then
     -p [ platform ]  default: x86
     * Specific a Chip Platform ( x86, ssd202, r818, raspi )
 
-    -t [ toolchain ]  default: /cross_compiler/ssd202/bin
-    * Specific a Toolchain Path
+    -t [ toolchain ]  default: /cross_compiler/ssd202/bin/arm-linux-gnueabihf-
+    * Specific a Toolchain Path  (Only available on cross compile)
 
     -d [ debug ]    default: Release
     Build debug type  ( Release, Debug, RelWithDebInfo, MinSizeRel )
 
     -k [ skip ]
     Skip enter confirm
+
+    -c [ clean ]
+    Clean old files
 
     -t [ testing ]
     Show testing configure only
@@ -150,6 +153,7 @@ echo -e "
 
   ARCH:                  ${arch}
   Platform:              ${platform}
+  Clean:                 ${clean}
 
   Project Dir:           ${QVGL_DIR}
   QuickVGL Dir:          ${QVGL_SRC_DIR}
@@ -176,7 +180,7 @@ echo -e "
 ConfirmSuspend "
 Press enter to continue configure..."
 
-if [[ ${clean} ]]; then
+if [ ${clean} == 1 ]; then
     rm -rf build
 fi
 
