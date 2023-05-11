@@ -127,6 +127,12 @@ function ResetDir() {
 
 if [[ ${platform} == 'ssd202' ]]; then
     arch='arm'
+    CMAKE_CROSS_FILE=${QVGL_DIR}/cross.cmake
+fi
+
+if [[ ${platform} == 'x86' ]]; then
+    arch='amd64'
+    CMAKE_CROSS_FILE=
 fi
 
 
@@ -144,7 +150,6 @@ elif [[ ${debug} == 'Debug' ]]; then
   export CXXFLAGS="-g"
 fi
 
-CMAKE_CROSS_FILE=${QVGL_DIR}/cross.cmake
 
 echo -e "
   ----------------------------------------------------------------------
@@ -198,13 +203,9 @@ USE_LIB_PNG=""
 ConfirmSuspend "
 Press enter to continue make zlib..."
 
-GotoDir ${QVGL_DIR}/build/zlib
+GotoDir ${QVGL_DIR}/build/${platform}/zlib
 
-if [ ${platform} == 'x86' ]; then
-    cmake ../../ -DCMAKE_BUILD_TYPE=${debug} ${SDL_ARGS} ${USE_LVGL9} ${FREETYPE_DEFINE}
-else
-    cmake ../../3rd/zlib-1.2.13 -DQVGL_LOCAL=${LOCAL_DIR} -DCMAKE_INSTALL_PREFIX=${LOCAL_DIR} -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CROSS_FILE} -DCMAKE_BUILD_TYPE=${debug} -DTOOLCHAIN_PREFIX=${toolchain} -DARCH=${arch}
-fi
+cmake ../../../3rd/zlib-1.2.13 -DQVGL_LOCAL=${LOCAL_DIR} -DCMAKE_INSTALL_PREFIX=${LOCAL_DIR} -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CROSS_FILE} -DCMAKE_BUILD_TYPE=${debug} -DTOOLCHAIN_PREFIX=${toolchain} -DARCH=${arch}
 
 ${MAKE_WITH_MULTI_CORES}
 ${MAKE_MAKE_INSTALL}
@@ -212,13 +213,9 @@ ${MAKE_MAKE_INSTALL}
 ConfirmSuspend "
 Press enter to continue make tslib..."
 
-GotoDir ${QVGL_DIR}/build/tslib
+GotoDir ${QVGL_DIR}/build/${platform}/tslib
 
-if [ ${platform} == 'x86' ]; then
-    cmake ../../ -DCMAKE_BUILD_TYPE=${debug} ${SDL_ARGS} ${USE_LVGL9} ${FREETYPE_DEFINE}
-else
-    cmake ../../3rd/tslib-1.22 -DQVGL_LOCAL=${LOCAL_DIR} -DCMAKE_INSTALL_PREFIX=${LOCAL_DIR} -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CROSS_FILE} -DCMAKE_BUILD_TYPE=${debug} -DTOOLCHAIN_PREFIX=${toolchain} -DARCH=${arch}
-fi
+cmake ../../../3rd/tslib-1.22 -DQVGL_LOCAL=${LOCAL_DIR} -DCMAKE_INSTALL_PREFIX=${LOCAL_DIR} -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CROSS_FILE} -DCMAKE_BUILD_TYPE=${debug} -DTOOLCHAIN_PREFIX=${toolchain} -DARCH=${arch}
 
 ${MAKE_WITH_MULTI_CORES}
 ${MAKE_MAKE_INSTALL}
@@ -226,13 +223,9 @@ ${MAKE_MAKE_INSTALL}
 ConfirmSuspend "
 Press enter to continue make freetype..."
 
-GotoDir ${QVGL_DIR}/build/freetype
+GotoDir ${QVGL_DIR}/build/${platform}/freetype
 
-if [ ${platform} == 'x86' ]; then
-    cmake ../../ -DCMAKE_BUILD_TYPE=${debug} ${SDL_ARGS} ${USE_LVGL9} ${FREETYPE_DEFINE}
-else
-    cmake ../../3rd/freetype -DQVGL_LOCAL=${LOCAL_DIR} -DCMAKE_INSTALL_PREFIX=${LOCAL_DIR} -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CROSS_FILE} -DCMAKE_BUILD_TYPE=${debug} -DTOOLCHAIN_PREFIX=${toolchain} -DARCH=${arch} ${FREETYPE_DEFINE}
-fi
+cmake ../../../3rd/freetype -DQVGL_LOCAL=${LOCAL_DIR} -DCMAKE_INSTALL_PREFIX=${LOCAL_DIR} -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CROSS_FILE} -DCMAKE_BUILD_TYPE=${debug} -DTOOLCHAIN_PREFIX=${toolchain} -DARCH=${arch} ${FREETYPE_DEFINE}
 
 ${MAKE_WITH_MULTI_CORES}
 ${MAKE_MAKE_INSTALL}
@@ -240,16 +233,12 @@ ${MAKE_MAKE_INSTALL}
 ConfirmSuspend "
 Press enter to continue make QuickVGL..."
 
-GotoDir ${QVGL_DIR}/build
+GotoDir ${QVGL_DIR}/build/${platform}
 
-if [ ${platform} == 'x86' ]; then
-    cmake .. -DCMAKE_BUILD_TYPE=${debug} ${SDL_ARGS} ${USE_LVGL9} ${FREETYPE_DEFINE}
-else
-    cmake .. -DQVGL_LOCAL=${LOCAL_DIR} -DCMAKE_INSTALL_PREFIX=${LOCAL_DIR} -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CROSS_FILE} -DCMAKE_BUILD_TYPE=${debug} -DTOOLCHAIN_PREFIX=${toolchain} -DARCH=${arch} ${USE_LVGL9} ${USE_LIB_PNG}
-fi
-
+cmake ../../ -DQVGL_LOCAL=${LOCAL_DIR} -DCMAKE_INSTALL_PREFIX=${LOCAL_DIR} -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CROSS_FILE} -DCMAKE_BUILD_TYPE=${debug} -DTOOLCHAIN_PREFIX=${toolchain} -DARCH=${arch} ${USE_LVGL9} ${USE_LIB_PNG}
 
 ConfirmSuspend "
 Press enter to continue make..."
 
 ${MAKE_WITH_MULTI_CORES}
+

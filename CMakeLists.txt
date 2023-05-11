@@ -18,7 +18,7 @@ endif()
 message("Your os type is: ${OS_TYPE}")
 
 set(QVGL_DIR ${CMAKE_CURRENT_SOURCE_DIR})
-set(QVGL_OUTPUTDIR ${QVGL_DIR}/output)
+set(QVGL_OUTPUTDIR ${QVGL_LOCAL})
 
 # Export DIRS
 set(EXECUTABLE_OUTPUT_PATH ${QVGL_OUTPUTDIR}/bin)
