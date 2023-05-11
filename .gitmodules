@@ -11,8 +11,8 @@
 	path = lv_js
 	url = https://gitee.com/spriteShur/lv_binding_js
 [submodule "freetype"]
-	path = freetype
+	path = 3rd/freetype
 	url = https://gitee.com/snow-github-mirrors/freetype.git
-[submodule "lodepng"]
-	path = lodepng
-	url = https://github.com/lvandeve/lodepng.git
+[submodule "sdl"]
+	path = sdl
+	url = https://github.com/libsdl-org/SDL

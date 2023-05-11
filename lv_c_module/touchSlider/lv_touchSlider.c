@@ -499,6 +499,7 @@ void QVGLC_touchSliderToPrev( int sliderFD, bool useAnimation ) {
         if (state->index<=0) state->movingTarget = 0;
     }
 
+    state->velocity = 1;
     swipeToTarget( state, useAnimation );
 
 }
@@ -517,6 +518,7 @@ void QVGLC_touchSliderToNext( int sliderFD, bool useAnimation ) {
         if (state->index>=state->total-1) state->movingTarget = state->total-1;
     }
 
+    state->velocity = 1;
     swipeToTarget( state, useAnimation );
 
 }

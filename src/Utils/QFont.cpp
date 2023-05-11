@@ -30,7 +30,26 @@ QFont::QFont(QString path, QInt fontSize) {
 
 QFont *QFont::initFreetype() {
     /*Create a font*/
+#if (LVGL_VERSION_MAJOR > 8)
     lvFont = lv_freetype_font_create( _fontPath.value().c_str(), _fontSize.value(), LV_FREETYPE_FONT_STYLE_NORMAL);
+#else
+    // FIXME
+    info = static_cast<lv_ft_info_t *>(malloc(sizeof(lv_ft_info_t)));
+    memset(info,0,sizeof(lv_ft_info_t));
+    /*Create a font*/
+    /*FreeType uses C standard file system, so no driver letter is required.*/
+
+    info->name   = _fontPath.value().c_str();
+    info->weight = _fontSize.value();
+    info->style  = FT_FONT_STYLE_NORMAL;
+    info->mem = nullptr;
+    if(!lv_ft_font_init(info)) {
+        printf("lv_ft_font_init failed (%s)\n",info->name );
+        return this;
+        LV_LOG_ERROR("create failed.");
+    }
+    lvFont = info->font;
+#endif
 
     if(!lvFont) {
         printf("freetype font create failed.\n");
@@ -48,10 +67,17 @@ QFont *QFont::initFreetype() {
 }
 
 QFont::~QFont() {
+#if (LVGL_VERSION_MAJOR>8)
     if (lvFont) lv_freetype_font_del(lvFont);
+#else
+    if (info) free(info);
+#endif
     if (fontStyle) free(fontStyle);
 }
 
-const lv_style_t *QFont::getStyle() {
+#if (LVGL_VERSION_MAJOR==9)
+const
+#endif
+lv_style_t *QFont::getStyle() {
     return fontStyle;
 }

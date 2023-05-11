@@ -45,6 +45,7 @@ QDisplay::QDisplay(lv_disp_drv_t *drv, uint16_t hres, uint16_t vres) {
         lvDisplayDriver->full_refresh = 1;
         lvDisplayDriver->rotated = LV_DISP_ROT_NONE;
         lvDisplayDriver->user_data = this;
+        lvDisplayDriver->draw_ctx_size = 1024*1024*4;
     } else
         memcpy(lvDisplayDriver, drv, sizeof(lv_disp_drv_t));
 

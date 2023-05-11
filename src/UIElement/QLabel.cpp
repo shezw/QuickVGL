@@ -30,12 +30,7 @@ QLabel * QLabel::append(QString * t) {
 
 QLabel *QLabel::font(QFont *ft) {
 
-//    /*Create a label with the new style*/
-//    lv_obj_t * label = lv_label_create(lv_scr_act());
     lv_obj_add_style( lvObj , ft->getStyle(), 0);
-//    lv_label_set_text(label, "Hello world\nI'm a font created with FreeType");
-//    lv_obj_center(label);
-//
     return this;
 }
 

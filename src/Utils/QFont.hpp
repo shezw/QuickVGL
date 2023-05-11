@@ -22,6 +22,9 @@ private:
 
     lv_font_t * lvFont = nullptr;
     lv_style_t * fontStyle = nullptr;
+#if (LVGL_VERSION_MAJOR<9)
+    lv_ft_info_t * info = nullptr;
+#endif
 public:
 
     QFont();
@@ -31,8 +34,10 @@ public:
 
     QFont * initFreetype();
 
-    const lv_style_t * getStyle();
-
+#if (LVGL_VERSION_MAJOR==9)
+    const
+#endif
+    lv_style_t * getStyle();
     ~QFont();
 };
 

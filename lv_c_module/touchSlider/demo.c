@@ -708,9 +708,9 @@ void testRadiusLabelSlider(){
             .objectWidth    = 120,
             .objectHeight   = 120,
             .index          = 0,
-            .maxBrother     = 9,
+            .maxBrother     = 15,
             .springEdgeRatio= 0.8f,
-            .radius         = 1600
+            .radius         = 300
     };
 
     int fd2 = QVGLC_touchSliderInit( elements2, max_label, &config2 );

@@ -19,6 +19,19 @@
 
 
 
+#if CHIP(R818)
+
+#ifndef USE_MEMCPY
+    #define USE_MEMCPY 0
+#endif
+
+#ifndef USE_R818DMA
+    #define USE_R818DMA 1
+#endif
+
+#endif
+
+
 
 
 
@@ -31,9 +44,24 @@
 #define USE_DMA 0
 #endif
 
+#define OS(OSTYPE) (defined OS_##OSTYPE && OS_##OSTYPE)
 
+#ifdef __APPLE__
+#ifndef OS_MAC
+    #define OS_MAC
+#endif
+#endif
 
+#ifdef __linux__
+#ifndef OS_LINUX
+#define OS_LINUX 1
+#endif
+#endif
 
-
+#ifdef _WIN32
+#ifndef OS_WIN
+#define OS_WIN
+#endif
+#endif
 
 #endif // HV_FBTEST_H

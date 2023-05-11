@@ -17,7 +17,9 @@
 #include <stdexcept>
 #include <unistd.h>
 #include <cstring>
+#if OS(LINUX)
 #include <linux/fb.h>
+#endif
 #include <sys/ioctl.h>
 #include <sys/mman.h>
 
