@@ -29,6 +29,16 @@ if (USE_LVGL9)
     set(LV_DIR lvgl)
 endif ()
 
+if (USE_TSLIB)
+
+    add_compile_definitions(USE_TSLIB=true)
+
+    include_directories(${QVGL_LOCAL}/include)
+    link_directories(${QVGL_LOCAL}/lib)
+    link_libraries(ts dl)
+
+endif ()
+
 if (USE_LIB_PNG)
 
     include_directories(${QVGL_DIR}/local/include)
@@ -58,6 +68,7 @@ include_directories(
         ${QVGL_SRC}/Utils
         ${QVGL_SRC}/UIElement
         ${QVGL_SRC}/UIKit
+        ${QVGL_SRC}/UIWidget
         ${QVGL_SRC}/UIManager
 )
 

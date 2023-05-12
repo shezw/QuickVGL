@@ -114,6 +114,8 @@ void QVGLC_touchSliderRegisterUpdate( int sliderFD, QVGLC_TouchSliderUpdated upd
 void QVGLC_touchSliderRegisterElementUpdate( int sliderFD, QVGLC_TouchSliderElementUpdated elementUpdatedCall );
 
 
+void QVGLC_touchSliderToIndex(int sliderFD, int targetIndex, bool useAnimation);
+
 /**
  * 切换到对应索引的元素
  * @param sliderFD
@@ -141,8 +143,8 @@ void QVGLC_touchSliderSwipeNext( int sliderFD );
 void QVGLC_touchSliderSwitchPrev( int sliderFD );
 void QVGLC_touchSliderSwitchNext( int sliderFD );
 
-#endif //QUICKVGL_LV_TOUCHSLIDER_H
-
 #ifdef __cplusplus
 } /*extern "C"*/
 #endif
+
+#endif //QUICKVGL_LV_TOUCHSLIDER_H

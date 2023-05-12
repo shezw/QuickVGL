@@ -14,18 +14,23 @@ class QLabel : public QView {
 
 private:
 
-    QString * _text;
+    QString * _text{};
 
 public:
 
     explicit QLabel( QString * t );
+    explicit QLabel( int i );
     explicit QLabel(const std::string &t): QLabel( new QString(t) ){}
     QLabel * bind( QString * t );
 
     QLabel * text( QString * t );
+    QLabel * text( QInt * t );
     QLabel * append( QString * t );
 
     QLabel * font( QFont * ft );
+
+    QLabel * textColor( QColor color );
+    QLabel * textColor( uint32_t hexColor );
 
     static QLabel * query( QHashID id );
 };

@@ -15,6 +15,8 @@
 
 #include "QUIKit.hpp"
 
+#include "QUIWidget.hpp"
+
 #include "QUIManager.hpp"
 
 class QuickVGL {

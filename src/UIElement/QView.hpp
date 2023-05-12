@@ -65,11 +65,15 @@ public:
 
     ~QView();
 
+    lv_obj_t * getObj(){ return lvObj; };
+
     QView( QSize size, QPosition pos );
 
     static QView * query( QHashID id );
     static QView * create( uint16_t w, uint16_t h, int16_t x, int16_t y );
     static QView * create( uint16_t w, uint16_t h );
+
+    std::vector<QView*> getChildren() const;
 
     /**
         Styles

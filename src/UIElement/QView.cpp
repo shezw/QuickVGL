@@ -99,8 +99,8 @@ QView *QView::bg(QColor bgColor) {
 }
 
 QView *QView::bg(QColor bgColor, QViewState forState) {
-    lv_obj_set_style_bg_color(lvObj, {bgColor.b,bgColor.g,bgColor.r},static_cast<lv_style_selector_t>(QViewState::DEFAULT));
-    lv_obj_set_style_bg_opa(lvObj, bgColor.a, static_cast<lv_style_selector_t>(QViewState::DEFAULT));
+    lv_obj_set_style_bg_color(lvObj, {bgColor.b,bgColor.g,bgColor.r},LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(lvObj, bgColor.a, LV_PART_MAIN | LV_STATE_DEFAULT);
     return this;
 }
 
@@ -267,4 +267,8 @@ QView *QView::bg(uint32_t bgColor, uint32_t checkColor) {
 
 QView *QView::clean() {
     return noScroll()->noPadding()->noBorder()->radius(0);
+}
+
+std::vector<QView *> QView::getChildren() const {
+    return nodes;
 }

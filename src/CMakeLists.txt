@@ -1,5 +1,5 @@
-
-include_directories(../src Graphics Utils UIElement UIKit UIManager)
+include_directories(../lv_c_module ../lv_c_module/touchSlider)
+include_directories(../src Graphics Utils UIElement UIKit UIWidget UIManager)
 
 set(QVGL_LIBFILES
 
@@ -35,6 +35,11 @@ set(QVGL_LIBFILES
         UIKit/QNav.cpp
         UIKit/QTab.hpp
         UIKit/QTab.cpp
+
+        UIWidget/QUIWidget.hpp
+
+        UIWidget/qTouchSlider.hpp
+        UIWidget/qTouchSlider.cpp
 
         UIManager/QEvent.hpp
         UIManager/QEvent.cpp
