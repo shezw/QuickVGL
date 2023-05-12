@@ -355,8 +355,6 @@ void testLabelSlider(){
 
     lv_obj_set_y(container2,0);
 
-
-
     auto ** elements2 = (lv_obj_t**) malloc(max_label*sizeof (lv_obj_t*));
 
     for (int i = 0; i < max_label; i++) {
@@ -417,25 +415,13 @@ void testRadiusLabelSlider(){
 
     ImageSet("DarkBg", "S:/customer/res/60889_flip/images/background.png");
 
-    auto * container2 = QV(800,1280,0,0)->clean()->noScroll()->bg({0,0,0,0xff});
+    auto * sliderContainer = QV(800,1280,0,0)->clean()->noScroll()->bg({0,0,0,0xff})->bg(qimgres("DarkBg"));
 
     for (int i = 0; i < 299; i++)
-        container2->insert(QV( 120,120, 0,50 )->clean()->noScroll()->bg((uint32_t)0x0)->insert( QL(i)->textColor( 0xff555555 ) ));
+        sliderContainer->insert(QV( 120,120, 0,50 )->clean()->noScroll()->bg((uint32_t)0x0)->insert( QL(i)->textColor( 0xff555555 ) ));
 
-    auto qTouchSliderController = new QTouchSlider( container2 );
-        qTouchSliderController
-        ->setSize( 1280, 120 )->setElementSize( 120, 120)->setCircleMode(2400)
-        ->visibleSiblings(15)->indexTo(0)
-        ->dirY()->layoutCenter()->useOpacity()->noScale()
-        ->loop()
-        ->initSlider();
-
-//    lv_obj_add_event_cb( container2->getObj(), swipeStartContainer2, LV_EVENT_PRESSED, nullptr);
-//    lv_obj_add_event_cb( container2->getObj(), swipeMoveContainer2, LV_EVENT_PRESSING, nullptr);
-//    lv_obj_add_event_cb( container2->getObj(), swipeEndContainer2, LV_EVENT_RELEASED, nullptr);
-//
-//    QVGLC_touchSliderRegisterElementUpdate( fd2, elementUpdatedCall );
-
+    auto qTouchSliderController = new QTouchSlider( sliderContainer );
+        qTouchSliderController->setSize( 1280, 120 )->setElementSize( 120, 120)->setCircleMode(2400)->visibleSiblings(15)->indexTo(0)->dirY()->layoutCenter()->useOpacity()->noScale()->loop()->initSlider();
 
 }
 
