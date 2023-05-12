@@ -591,6 +591,9 @@ int QVGLC_touchSliderInit( lv_obj_t ** objs, int size, QVGLC_TouchSliderConfig_t
     state->canLoop          = config->canLoop;
     state->attenuation      = config->attenuation;
     state->inertia          = config->inertia;
+    if (state->inertia==0.0)
+        state->inertia = 0.8f;
+
     state->useScale         = config->useScale;
     state->useOpacity       = config->useOpacity;
     state->radius           = config->radius;

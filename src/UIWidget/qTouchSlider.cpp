@@ -26,6 +26,8 @@ QTouchSlider::QTouchSlider( QView * containerView ) {
         .maxBrother     = 2,
     };
 
+    container = containerView;
+
     std::vector<QView*> nodes = containerView->getChildren();
     size = containerView->getChildren().size();
 
@@ -45,9 +47,24 @@ QTouchSlider::~QTouchSlider() {
     free(objs);
 }
 
-QTouchSlider *QTouchSlider::initSlider() {
+void QTouchSlider::swipeStart( lv_event_t * evt ) {
+    QVGLC_touchSliderTouchStart( ((int*) evt->user_data)[0], evt );
+}
+void QTouchSlider::swipeMove( lv_event_t * evt ) {
+    QVGLC_touchSliderTouchMove( ((int*) evt->user_data)[0], evt );
+}
+void QTouchSlider::swipeEnd( lv_event_t * evt ) {
+    QVGLC_touchSliderTouchUp( ((int*) evt->user_data)[0], evt );
+}
+
+QTouchSlider *QTouchSlider::initSlider(  ) {
     fd = QVGLC_touchSliderInit( objs, (int)size, &config );
     inited = true;
+
+    lv_obj_add_event_cb( container->getObj(), swipeStart, LV_EVENT_PRESSED, (void*)&fd);
+    lv_obj_add_event_cb( container->getObj(), swipeMove, LV_EVENT_PRESSING, (void*)&fd);
+    lv_obj_add_event_cb( container->getObj(), swipeEnd, LV_EVENT_RELEASED, (void*)&fd);
+
     return this;
 }
 
@@ -88,5 +105,16 @@ QTouchSlider *QTouchSlider::indexTo(int idx, bool useAnimation) {
     else{
         QVGLC_touchSliderToIndex( fd, idx, useAnimation );
     }
+    return this;
+}
+
+// FIXME
+void QTouchSlider::elementUpdatedCall(lv_obj_t *element, int idx, int selected) {
+
+}
+
+QTouchSlider *QTouchSlider::onUpdate(QTouchSlider::UpdateCall call) {
+
+    QVGLC_touchSliderRegisterElementUpdate( fd, elementUpdatedCall );
     return this;
 }

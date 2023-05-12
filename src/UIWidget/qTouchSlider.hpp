@@ -17,8 +17,14 @@ private:
     size_t size;
 
     QVGLC_TouchSliderConfig_t config;
+    QView * container;
 
     bool inited = false;
+
+    static void swipeStart( lv_event_t * evt );
+    static void swipeMove( lv_event_t * evt );
+    static void swipeEnd( lv_event_t * evt );
+    static void elementUpdatedCall( lv_obj_t * element, int idx, int selected );
 
 public:
 
@@ -57,6 +63,10 @@ public:
     QTouchSlider * indexTo( int idx, bool useAnimation );
 
     QTouchSlider * initSlider();
+
+    typedef std::function<void(QView * view)> UpdateCall;
+
+    QTouchSlider * onUpdate( UpdateCall call );
 };
 
 
