@@ -40,7 +40,8 @@ QTouchSlider::QTouchSlider( QView * containerView ) {
 
 QTouchSlider::~QTouchSlider() {
 
-    QVGLC_touchSliderDeInit(fd);
+    if (inited)
+        QVGLC_touchSliderDeInit(fd);
     free(objs);
 }
 
