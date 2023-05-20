@@ -28,7 +28,7 @@
 
 #if CHIP(SSD202)
 
-#include "mstarFb.h"
+//#include "mstarFb.h"
 #include "mi_sys.h"
 
 #endif

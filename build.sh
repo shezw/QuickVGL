@@ -125,9 +125,12 @@ function ResetDir() {
     GotoDir ${_dir}
 }
 
+CHIP_SET=""
+
 if [[ ${platform} == 'ssd202' ]]; then
     arch='arm'
     CMAKE_CROSS_FILE=${QVGL_DIR}/cross.cmake
+    CHIP_SET="-DCHIP_SSD202=YES"
 fi
 
 if [[ ${platform} == 'x86' ]]; then
@@ -237,7 +240,7 @@ Press enter to continue make QuickVGL..."
 
 GotoDir ${QVGL_DIR}/build/${platform}
 
-cmake ../../ -DQVGL_LOCAL=${LOCAL_DIR} -DCMAKE_INSTALL_PREFIX=${LOCAL_DIR} -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CROSS_FILE} -DCMAKE_BUILD_TYPE=${debug} -DTOOLCHAIN_PREFIX=${toolchain} -DARCH=${arch} ${USE_LVGL9} ${USE_LIB_PNG} ${USE_TSLIB}
+cmake ../../ -DQVGL_LOCAL=${LOCAL_DIR} -DCMAKE_INSTALL_PREFIX=${LOCAL_DIR} -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CROSS_FILE} -DCMAKE_BUILD_TYPE=${debug} -DTOOLCHAIN_PREFIX=${toolchain} -DARCH=${arch} ${CHIP_SET} ${USE_LVGL9} ${USE_LIB_PNG} ${USE_TSLIB}
 
 ConfirmSuspend "
 Press enter to continue make..."
