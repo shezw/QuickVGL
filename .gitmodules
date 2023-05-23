@@ -16,3 +16,6 @@
 [submodule "sdl"]
 	path = sdl
 	url = https://github.com/libsdl-org/SDL
+[submodule "3rd/DirectFB2"]
+	path = 3rd/DirectFB2
+	url = https://git.sanbontft.com:8081/lvgl_project/DirectFB2
