@@ -18,6 +18,32 @@ if(UNIX AND NOT APPLE)
     add_compile_definitions(OS_LINUX=1)
 endif()
 
+if (${CHIP_SSD202})
+
+add_compile_definitions(CHIP_SSD202=1)
+
+set(SSD202_SOURCE_PATH /home/shezw/ssd202-sdk)
+
+
+## SSD202 SDK
+set(SSD202_PROJECT ${SSD202_SOURCE_PATH}/project)
+#
+include_directories(
+        ${SSD202_PROJECT}/release/include
+)
+#
+link_directories(
+        ${SSD202_PROJECT}/release/nvr/i2m/common/glibc/8.2.1/mi_libs/dynamic
+        ${SSD202_PROJECT}/release/nvr/i2m/common/glibc/8.2.1/ex_libs/dynamic
+)
+
+link_libraries(
+        mi_common mi_sys pthread dl
+)
+
+
+endif ()
+
 message("Your os type is: ${OS_TYPE}")
 
 set(QVGL_DIR ${CMAKE_CURRENT_SOURCE_DIR})
