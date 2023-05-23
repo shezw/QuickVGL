@@ -5,6 +5,8 @@
 #include "FrameBuffer.hpp"
 #include <cstdio>
 
+#if OS_LINUX
+
 #if CHIP(SSD202)
 
 #include "mstarFb.h"
@@ -18,6 +20,7 @@ FrameBuffer::FrameBuffer(const char *device ) {
 }
 
 QSize FrameBuffer::getScreenSize() {
+
     return {
             (uint16_t)vinfo.xres,
             (uint16_t)vinfo.yres
@@ -25,6 +28,8 @@ QSize FrameBuffer::getScreenSize() {
 }
 
 FrameBuffer::FrameBuffer(const char *device, bool useDB) {
+
+#if OS(LINUX)
 
     enableDoubleBuf = useDB;
     currentScreen = 0;
@@ -54,7 +59,7 @@ FrameBuffer::FrameBuffer(const char *device, bool useDB) {
     fb_draw_buffer = enableDoubleBuf ? &screen_buffer[ screen_size * ( (currentScreen+1) % 2 ) ] : new char [screen_size] ;
 
     printf("FrameBuffer Done! \n" );
-
+#endif
 }
 
 FrameBuffer::~FrameBuffer() {
@@ -250,3 +255,5 @@ void FrameBuffer::swap_buffer() {
         memcpy(screen_buffer, fb_draw_buffer, screen_size);
     }
 }
+
+#endif

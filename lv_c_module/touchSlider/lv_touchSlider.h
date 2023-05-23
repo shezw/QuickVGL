@@ -32,9 +32,9 @@ typedef enum {
     TOUCH_SLIDER_FX_MODE_CIRCLE = 1  // 弧面列表
 } QVGLC_TOUCH_SLIDER_FX_MODE;
 
-typedef void (* QVGLC_TouchSliderElementUpdated )( lv_obj_t * element, int idx, int selected ) ;
-typedef void (* QVGLC_TouchSliderUpdated )( int selected ) ;
-typedef void (* QVGLC_TouchSliderSelectionUpdated)( int selected );
+typedef void (* QVGLC_TouchSliderElementUpdated )( lv_obj_t * element, int idx, int selected, int fd ) ;
+typedef void (* QVGLC_TouchSliderUpdated )( int selected, int fd ) ;
+typedef void (* QVGLC_TouchSliderSelectionUpdated)( int selected, int fd );
 
 typedef struct QVGL_TOUCH_SLIDER_CONFIG {
 

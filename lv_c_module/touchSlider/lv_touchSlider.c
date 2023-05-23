@@ -294,7 +294,7 @@ void updateSingleElementPos( lv_obj_t * obj, QVGLC_TouchSliderState * state, int
         lv_obj_add_flag( obj, LV_OBJ_FLAG_HIDDEN );
 
     if (state->elementUpdatedCall)
-        state->elementUpdatedCall( obj, idx, state->index );
+        state->elementUpdatedCall( obj, idx, state->index, state->fd);
 //    printf("updateSingleElementPos %d %d  index_offset %d, should hide %d  \n", idx, movingOffset, state->index_offset,abs(elOffset) <= state->maxBrother );
 }
 
@@ -365,7 +365,7 @@ void refreshView( QVGLC_TouchSliderState * state, bool useAnimation ){
 //    printf("%d,%d   Active: %d\n",point_p.x,point_p.y, state->index);
 
     if (state->updatedCall)
-        state->updatedCall( state->index );
+        state->updatedCall( state->index, state->fd );
 }
 
 
@@ -413,7 +413,7 @@ void swipeToTarget( QVGLC_TouchSliderState * state, bool useAnimation ){
      */
 
     if ( state->selectionUpdatedCall )
-        state->selectionUpdatedCall( state->index );
+        state->selectionUpdatedCall( state->index, state->fd );
 }
 
 
@@ -781,8 +781,12 @@ void startAnimationThread( QVGLC_TouchSliderState * state ) {
 
     cmd->fd = sliderFD;
     cmd->state = state;
-    cmd->fps   = 1000/LV_DISP_DEF_REFR_PERIOD;
 
+#if (LVGL_VERSION_MAJOR > 8)
+    cmd->fps   = 1000/20;
+#else
+    cmd->fps   = 1000/LV_DISP_DEF_REFR_PERIOD;
+#endif
     cmd->duration = (QVGLC_timestamp)floorf(powf(state->velocity,state->inertia)) * state->baseDelay;
 
     int ret = pthread_create( &animation_threads[sliderFD] , NULL, runningAnimationThread, (void *)cmd);

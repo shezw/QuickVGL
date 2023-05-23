@@ -2,6 +2,7 @@
 // Created by mac on 2023/3/5.
 //
 #include <cstdlib>
+#include "QuickVGL.hpp"
 #include "QView.hpp"
 #include "QImageResource.hpp"
 #include "QUIManager.hpp"
@@ -271,4 +272,8 @@ QView *QView::clean() {
 
 std::vector<QView *> QView::getChildren() const {
     return nodes;
+}
+
+QView *QView::getChild(int index) const {
+    return nodes.at(index);
 }

@@ -4,6 +4,10 @@
 
 #include "qTouchSlider.hpp"
 
+#include <utility>
+
+static QTouchSlider * QSliders[MAX_SLIDER];
+
 QTouchSlider::QTouchSlider( QView * containerView ) {
 
     config = {
@@ -42,8 +46,19 @@ QTouchSlider::QTouchSlider( QView * containerView ) {
 
 QTouchSlider::~QTouchSlider() {
 
-    if (inited)
+    if (inited) {
+
+        lv_obj_remove_event_cb( container->getObj(), swipeStart);
+        lv_obj_remove_event_cb( container->getObj(), swipeMove);
+        lv_obj_remove_event_cb( container->getObj(), swipeEnd);
+
+        if (QSliders[fd]->updateCallback)
+            QSliders[fd]->updateCallback = nullptr;
+
+        QSliders[fd] = nullptr;
+
         QVGLC_touchSliderDeInit(fd);
+    }
     free(objs);
 }
 
@@ -108,13 +123,19 @@ QTouchSlider *QTouchSlider::indexTo(int idx, bool useAnimation) {
     return this;
 }
 
-// FIXME
-void QTouchSlider::elementUpdatedCall(lv_obj_t *element, int idx, int selected) {
+void QTouchSlider::elementUpdatedCall(lv_obj_t *element, int idx, int selected, int fd) {
 
+    if( QSliders[fd] ) {
+        auto *qSlider = QSliders[fd];
+
+        qSlider->updateCallback( qSlider->container->getChild(idx), idx, selected, fd );
+    }
 }
 
-QTouchSlider *QTouchSlider::onUpdate(QTouchSlider::UpdateCall call) {
+QTouchSlider *QTouchSlider::onUpdate(UpdateCall call) {
 
+    QSliders[fd] = this;
+    QSliders[fd]->updateCallback = std::move(call);
     QVGLC_touchSliderRegisterElementUpdate( fd, elementUpdatedCall );
     return this;
 }

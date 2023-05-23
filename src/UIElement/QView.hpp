@@ -74,6 +74,7 @@ public:
     static QView * create( uint16_t w, uint16_t h );
 
     std::vector<QView*> getChildren() const;
+    QView * getChild( int index ) const;
 
     /**
         Styles

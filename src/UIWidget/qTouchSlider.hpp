@@ -8,6 +8,8 @@
 #include "lv_touchSlider.h"
 #include "QView.hpp"
 
+typedef std::function<void(QView * view, int index, int selected, int fd)> UpdateCall;
+
 class QTouchSlider {
 
 private:
@@ -24,7 +26,9 @@ private:
     static void swipeStart( lv_event_t * evt );
     static void swipeMove( lv_event_t * evt );
     static void swipeEnd( lv_event_t * evt );
-    static void elementUpdatedCall( lv_obj_t * element, int idx, int selected );
+    static void elementUpdatedCall( lv_obj_t * element, int idx, int selected, int fd );
+
+    UpdateCall updateCallback;
 
 public:
 
@@ -63,8 +67,6 @@ public:
     QTouchSlider * indexTo( int idx, bool useAnimation );
 
     QTouchSlider * initSlider();
-
-    typedef std::function<void(QView * view)> UpdateCall;
 
     QTouchSlider * onUpdate( UpdateCall call );
 };

@@ -1,4 +1,4 @@
-include_directories(./touchSlider)
+include_directories(./touchSlider ./testHal)
 
 set(LV_MODULE_TOUCHSLIDER_LIBFILES
 

@@ -8,8 +8,21 @@
 #include <string>
 #include <lv_drv_conf.h>
 
+#define DEFAULT_EVDEV_NAME "/dev/input/event0"
+
+#if OS_LINUX
 #if USE_EVDEV
 #include "indev/evdev.h"
+#endif
+
+#include <linux/input.h>
+
+#elif OS_MAC
+#include "sdl/sdl.h"
+#include "indev/mouse.h"
+#include "indev/keyboard.h"
+#include "indev/mousewheel.h"
+
 #endif
 
 class QInput {

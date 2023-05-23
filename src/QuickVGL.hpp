@@ -25,6 +25,7 @@ class QuickVGL {
 
 public:
     static void init();
+    static void init( int window_w, int window_h );
     static void init( uint32_t loopInMS );
     static void showVersion();
     static void exit();

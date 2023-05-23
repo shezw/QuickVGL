@@ -5,7 +5,9 @@
 #ifndef QUICKVGL_FRAMEBUFFER_HPP
 #define QUICKVGL_FRAMEBUFFER_HPP
 
-#include "config.h"
+#if OS_LINUX
+
+#include "configs/config.h"
 #include "QTypes.hpp"
 
 #include <cmath>
@@ -34,9 +36,10 @@
 #endif
 
 class FrameBuffer {
+#if OS(LINUX)
     struct fb_var_screeninfo vinfo;
     struct fb_fix_screeninfo finfo;
-
+#endif
     int fbfd{};
 
     uint8_t buffer_index = 0;
@@ -75,4 +78,5 @@ public:
     void swap_buffer();
 };
 
+#endif
 #endif //QUICKVGL_FRAMEBUFFER_HPP

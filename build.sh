@@ -56,7 +56,7 @@ done
 if [[
     ${toolchain} == "" ||
     ${debug} == "" || (${debug} != 'Release' && ${debug} != 'Debug' && ${debug} != 'RelWithDebInfo' && ${debug} != 'MinSizeRel') ||
-    ${platform} == "" || (${platform} != 'x86' && ${platform} != 'ssd202' && ${platform} != 'r818' && ${platform} != 'raspi')
+    ${platform} == "" || (${platform} != 'x86' && ${platform} != 'ssd202' && ${platform} != 'r818' && ${platform} != 'raspi' && ${platform} != 'mac')
 ]]; then
   help=1
 fi
@@ -135,6 +135,11 @@ if [[ ${platform} == 'x86' ]]; then
     CMAKE_CROSS_FILE=
 fi
 
+if [[ ${platform} == 'mac' ]]; then
+    arch='arm64'
+    CMAKE_CROSS_FILE=
+fi
+
 
 if [[ ${debug} == 'Release' ]]; then
   export CFLAGS="-O2"
@@ -194,12 +199,18 @@ SDL_ARGS=" -DSDL_WAYLAND=OFF -DSDL_X11=OFF -DSDL_VULKAN=OFF -DSDL_AUDIO=OFF -DSD
 USE_LVGL9=" -DUSE_LVGL9=ON"
 USE_WS_SERVER=" -DUSE_WS_SERVER=ON"
 #USE_TSLIB="-DUSE_TSLIB=ON"
-#FREETYPE_DEFINE=" -DFT_DISABLE_HARFBUZZ=YES -DFT_DISABLE_BROTLI=YES -DFT_DISABLE_BZIP2=YES"
+USE_FREETYPE="-DUSE_FREETYPE=ON"
 #USE_LIB_PNG="-DUSE_LIB_PNG=ON -DPNG_BUILD_ZLIB=ON"
-FREETYPE_DEFINE=""
+#USE_FREETYPE=""
 USE_LIB_PNG=""
 #USE_LVGL9=""
 USE_TSLIB=""
+USE_SDL="OFF"
+
+if [ ${platform} == 'mac' ]; then
+    USE_TSLIB=""
+    USE_SDL="-DUSE_SDL=ON"
+fi
 
 
 ConfirmSuspend "
@@ -212,32 +223,62 @@ cmake ../../../3rd/zlib-1.2.13 -DQVGL_LOCAL=${LOCAL_DIR} -DCMAKE_INSTALL_PREFIX=
 ${MAKE_WITH_MULTI_CORES}
 ${MAKE_MAKE_INSTALL}
 
-ConfirmSuspend "
-Press enter to continue make tslib..."
+if [ ${USE_TSLIB} != "" ]; then
 
-GotoDir ${QVGL_DIR}/build/${platform}/tslib
+    ConfirmSuspend "
+    Press enter to continue make tslib..."
 
-cmake ../../../3rd/tslib-1.22 -DQVGL_LOCAL=${LOCAL_DIR} -DCMAKE_INSTALL_PREFIX=${LOCAL_DIR} -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CROSS_FILE} -DCMAKE_BUILD_TYPE=${debug} -DTOOLCHAIN_PREFIX=${toolchain} -DARCH=${arch}
+    GotoDir ${QVGL_DIR}/build/${platform}/tslib
 
-${MAKE_WITH_MULTI_CORES}
-${MAKE_MAKE_INSTALL}
+    cmake ../../../3rd/tslib-1.22 -DQVGL_LOCAL=${LOCAL_DIR} -DCMAKE_INSTALL_PREFIX=${LOCAL_DIR} -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CROSS_FILE} -DCMAKE_BUILD_TYPE=${debug} -DTOOLCHAIN_PREFIX=${toolchain} -DARCH=${arch}
+
+    ${MAKE_WITH_MULTI_CORES}
+    ${MAKE_MAKE_INSTALL}
+
+fi
 
 ConfirmSuspend "
 Press enter to continue make freetype..."
 
 GotoDir ${QVGL_DIR}/build/${platform}/freetype
 
-cmake ../../../3rd/freetype -DQVGL_LOCAL=${LOCAL_DIR} -DCMAKE_INSTALL_PREFIX=${LOCAL_DIR} -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CROSS_FILE} -DCMAKE_BUILD_TYPE=${debug} -DTOOLCHAIN_PREFIX=${toolchain} -DARCH=${arch} ${FREETYPE_DEFINE}
+cmake ../../../3rd/freetype -DQVGL_LOCAL=${LOCAL_DIR} -DCMAKE_INSTALL_PREFIX=${LOCAL_DIR} -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CROSS_FILE} -DCMAKE_BUILD_TYPE=${debug} -DTOOLCHAIN_PREFIX=${toolchain} -DARCH=${arch}
 
 ${MAKE_WITH_MULTI_CORES}
 ${MAKE_MAKE_INSTALL}
+
+
+ConfirmSuspend "
+Press enter to continue make png..."
+
+GotoDir ${QVGL_DIR}/build/${platform}/libpng-1.6.39
+
+cmake ../../../3rd/libpng-1.6.39 -DQVGL_LOCAL=${LOCAL_DIR} -DCMAKE_INSTALL_PREFIX=${LOCAL_DIR} -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CROSS_FILE} -DCMAKE_BUILD_TYPE=${debug} -DTOOLCHAIN_PREFIX=${toolchain} -DARCH=${arch}
+
+${MAKE_WITH_MULTI_CORES}
+${MAKE_MAKE_INSTALL}
+
+
+if [ ${platform} == "mac" ]; then
+
+ConfirmSuspend "
+Press enter to continue make SDL2..."
+
+GotoDir ${QVGL_DIR}/build/${platform}/sdl
+
+cmake ../../../3rd/SDL-2.26.5 -DQVGL_LOCAL=${LOCAL_DIR} -DCMAKE_INSTALL_PREFIX=${LOCAL_DIR} -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CROSS_FILE} -DCMAKE_BUILD_TYPE=${debug} -DTOOLCHAIN_PREFIX=${toolchain} -DARCH=${arch}
+
+${MAKE_WITH_MULTI_CORES}
+${MAKE_MAKE_INSTALL}
+
+fi
 
 ConfirmSuspend "
 Press enter to continue make QuickVGL..."
 
 GotoDir ${QVGL_DIR}/build/${platform}
 
-cmake ../../ -DQVGL_LOCAL=${LOCAL_DIR} -DCMAKE_INSTALL_PREFIX=${LOCAL_DIR} -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CROSS_FILE} -DCMAKE_BUILD_TYPE=${debug} -DTOOLCHAIN_PREFIX=${toolchain} -DARCH=${arch} ${USE_LVGL9} ${USE_LIB_PNG} ${USE_TSLIB}
+cmake ../../ -DQVGL_LOCAL=${LOCAL_DIR} -DCMAKE_INSTALL_PREFIX=${LOCAL_DIR} -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CROSS_FILE} -DCMAKE_BUILD_TYPE=${debug} -DTOOLCHAIN_PREFIX=${toolchain} -DARCH=${arch} ${USE_FREETYPE} ${USE_LVGL9} ${USE_LIB_PNG} ${USE_TSLIB} ${USE_SDL}
 
 ConfirmSuspend "
 Press enter to continue make..."
