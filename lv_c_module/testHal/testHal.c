@@ -9,7 +9,7 @@
 #define SYSTEM_RESPONSE_TIME 5  /* Default to 5 milliseconds to keep the system responsive */
 #endif
 
-#if OS_LINUX
+#if 1
 
 /*
     Linux frame buffer like /dev/fb0

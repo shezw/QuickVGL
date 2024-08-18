@@ -16,11 +16,6 @@ arch="x86"
 
 MAKE_CORES=64
 
-MAKE_WITH_MULTI_CORES="make -j${MAKE_CORES}"
-MAKE_MAKE_INSTALL="make install -j${MAKE_CORES}"
-BUILD_PREFIX="--prefix=${WEBKIT_HV_PREFIX}"
-TARGET_PREFIX="--host=${CROSS_COMPILER_HOST}"
-
 while getopts ":kct:d:p:" opt
 do
     case $opt in
@@ -120,7 +115,7 @@ function GotoDir() {
 function ResetDir() {
     _dir=$1
     echo "   Rebuild Dir"
-    cd ${HVTK_DIR}
+    cd ${QVGL_DIR}
     rm -rf "${_dir}"
     GotoDir ${_dir}
 }
@@ -130,7 +125,14 @@ CHIP_SET=""
 if [[ ${platform} == 'ssd202' ]]; then
     arch='arm'
     CMAKE_CROSS_FILE=${QVGL_DIR}/cross.cmake
+    MESON_CROSS_FILE=${QVGL_DIR}/cross.meson.txt
     CHIP_SET="-DCHIP_SSD202=YES"
+
+      CROSS_COMPILER="arm-linux-gnueabihf"
+      CROSS_COMPILER_HOST="arm-linux-gnueabihf"
+      CROSS_COMPILER_DIR="/cross_compiler/${platform}"
+
+    CROSS_COMPILER_HOST="arm-linux-gnueabihf"
 fi
 
 if [[ ${platform} == 'x86' ]]; then
@@ -158,6 +160,12 @@ elif [[ ${debug} == 'Debug' ]]; then
   export CXXFLAGS="-g"
 fi
 
+
+MAKE_WITH_MULTI_CORES="make -j${MAKE_CORES}"
+MAKE_MAKE_INSTALL="make install -j${MAKE_CORES}"
+LOCAL_DIR="${PWD}/local/${platform}"
+BUILD_PREFIX="--prefix=${LOCAL_DIR}"
+TARGET_PREFIX="--host=${CROSS_COMPILER_HOST}"
 
 echo -e "
   ----------------------------------------------------------------------
@@ -197,15 +205,14 @@ if [ ${clean} == 1 ]; then
     rm -rf build
 fi
 
-LOCAL_DIR="${PWD}/local/${platform}"
 SDL_ARGS=" -DSDL_WAYLAND=OFF -DSDL_X11=OFF -DSDL_VULKAN=OFF -DSDL_AUDIO=OFF -DSDL_VIDEO=OFF -DSDL_OPENGLES=OFF -DSDL_OPENGL=OFF -DSDL_IBUS=OFF"
 USE_LVGL9=" -DUSE_LVGL9=ON"
 USE_WS_SERVER=" -DUSE_WS_SERVER=ON"
 #USE_TSLIB="-DUSE_TSLIB=ON"
 USE_FREETYPE="-DUSE_FREETYPE=ON"
-#USE_LIB_PNG="-DUSE_LIB_PNG=ON -DPNG_BUILD_ZLIB=ON"
+USE_LIB_PNG="-DUSE_LIB_PNG=ON"
 #USE_FREETYPE=""
-USE_LIB_PNG=""
+#USE_LIB_PNG=""
 #USE_LVGL9=""
 USE_TSLIB=""
 USE_SDL="OFF"
@@ -215,6 +222,11 @@ if [ ${platform} == 'mac' ]; then
     USE_SDL="-DUSE_SDL=ON"
 fi
 
+export LDFLAGS="-L${LOCAL_DIR}/lib"
+export CPPFLAGS="-I${LOCAL_DIR}/include"
+export PKG_CONFIG_LIBDIR="${LOCAL_DIR}/lib/pkgconfig:${LOCAL_DIR}/lib/share/pkgconfig"
+
+#export PKG_CONFIG_LIBDIR="${LOCAL_DIR}/lib/pkgconfig:${LOCAL_DIR}/share/pkgconfig"
 
 ConfirmSuspend "
 Press enter to continue make zlib..."
@@ -226,7 +238,7 @@ cmake ../../../3rd/zlib-1.2.13 -DQVGL_LOCAL=${LOCAL_DIR} -DCMAKE_INSTALL_PREFIX=
 ${MAKE_WITH_MULTI_CORES}
 ${MAKE_MAKE_INSTALL}
 
-if [ ${USE_TSLIB} != "" ]; then
+if [[ ${USE_TSLIB} != "" ]]; then
 
     ConfirmSuspend "
     Press enter to continue make tslib..."
@@ -240,15 +252,32 @@ if [ ${USE_TSLIB} != "" ]; then
 
 fi
 
+
 ConfirmSuspend "
-Press enter to continue make freetype..."
+Press enter to continue make pixman..."
 
-GotoDir ${QVGL_DIR}/build/${platform}/freetype
+GotoDir ${QVGL_DIR}/build/${platform}/pixman-0.42.2
+export PKG_CONFIG_PATH=${LOCAL_DIR}
+meson build ../../../3rd/pixman-0.42.2 --cross-file=${MESON_CROSS_FILE} --buildtype=release --default-library=static -Dlibpng=disabled -Dtls=disabled -Dopenmp=disabled
 
-cmake ../../../3rd/freetype -DQVGL_LOCAL=${LOCAL_DIR} -DCMAKE_INSTALL_PREFIX=${LOCAL_DIR} -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CROSS_FILE} -DCMAKE_BUILD_TYPE=${debug} -DTOOLCHAIN_PREFIX=${toolchain} -DARCH=${arch}
+cd build
+ninja
+ninja install
+
+
+ConfirmSuspend "
+Press enter to continue make cairo..."
+
+GotoDir ${QVGL_DIR}/build/${platform}/cairo-1.16.0
+export PKG_CONFIG_PATH=${LOCAL_DIR}
+../../../3rd/cairo-1.16.0/configure --enable-xlib=no --disable-dependency-tracking ${BUILD_PREFIX} ${TARGET_PREFIX} --disable-directfb --disable-win32 --enable-gl=no --enable-ft=no --enable-interpreter=no --enable-pdf=no --enable-png=no --enable-ps=no --enable-svg=no --enable-qt=no --enable-drm=no
 
 ${MAKE_WITH_MULTI_CORES}
 ${MAKE_MAKE_INSTALL}
+
+
+#AddLibDep "cairo-1.16.0" "${SHARED_LIB_ON} --enable-directfb --disable-win32 --enable-gl=no --enable-ft=yes --enable-interpreter=no --enable-pdf=yes --enable-png=yes --enable-ps=yes --enable-svg=yes --enable-qt=no --enable-drm=no"
+
 
 
 ConfirmSuspend "
@@ -256,7 +285,18 @@ Press enter to continue make png..."
 
 GotoDir ${QVGL_DIR}/build/${platform}/libpng-1.6.39
 
-cmake ../../../3rd/libpng-1.6.39 -DQVGL_LOCAL=${LOCAL_DIR} -DCMAKE_INSTALL_PREFIX=${LOCAL_DIR} -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CROSS_FILE} -DCMAKE_BUILD_TYPE=${debug} -DTOOLCHAIN_PREFIX=${toolchain} -DARCH=${arch}
+cmake ../../../3rd/libpng-1.6.39 -DPNG_STATIC=YES -DQVGL_LOCAL=${LOCAL_DIR} -DCMAKE_INSTALL_PREFIX=${LOCAL_DIR} -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CROSS_FILE} -DCMAKE_BUILD_TYPE=${debug} -DTOOLCHAIN_PREFIX=${toolchain} -DARCH=${arch}
+
+${MAKE_WITH_MULTI_CORES}
+${MAKE_MAKE_INSTALL}
+
+
+ConfirmSuspend "
+Press enter to continue make freetype..."
+
+GotoDir ${QVGL_DIR}/build/${platform}/freetype
+
+cmake ../../../3rd/freetype -DQVGL_LOCAL=${LOCAL_DIR} -DCMAKE_INSTALL_PREFIX=${LOCAL_DIR} -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CROSS_FILE} -DCMAKE_BUILD_TYPE=${debug} -DTOOLCHAIN_PREFIX=${toolchain} -DARCH=${arch}
 
 ${MAKE_WITH_MULTI_CORES}
 ${MAKE_MAKE_INSTALL}
